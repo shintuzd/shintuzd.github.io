@@ -15,7 +15,32 @@
     color: #303030;
     line-height: 1.6;
   }
-  
+
+  body.full-map-page {
+    overflow-x: hidden;
+}
+
+  .full-map-page #foodmap {
+    width: 80vw;
+    position: relative;
+    
+    /* 1. Move the left edge to the center of the screen */
+    left: 50%; 
+    
+    /* 2. Pull the map back by half of its OWN width */
+    transform: translateX(-50%); 
+    
+    height: 80vh;
+    border-radius: 8px; /* Keeps the rounded corners since it's not full-screen */
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+  .full-map-page #travelmap {
+    width: 70vw;
+    height: 80vh;
+    margin: 2rem auto;   /* centers cleanly */
+    border-radius: 8px;
+}
   p {
     margin: 0;
   }
@@ -276,17 +301,21 @@
   }
   
   #the_map,
-  #the_map2,
-  #the_map3 {
+  #the_map2 {
     height: 60vh;
     margin: 1rem auto;
     width: 100%;
     border-radius: 8px;
   }
 
+
    /* Large screens */
 
   @media (min-width: 1200px) {
+
+    .main_content {
+    max-width: 1550px; /* Increased from 1000px */
+  }
 
     .header {
       flex-direction: row;
@@ -318,7 +347,7 @@
     }
   
     #cardokun {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
     }
   
     #restaurant_interface {
@@ -442,3 +471,39 @@
     margin-bottom: 1rem;
   }
   }
+
+  /* Style for the legend container */
+.info.legend {
+    padding: 10px;
+    font-family: system-ui, sans-serif;
+    background: white;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    line-height: 24px;
+    color: #333;
+}
+
+/* Style for the little icons in the legend */
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 10px;
+    opacity: 0.7;
+    border-radius: 50%; /* Makes the Want-to-Go icon a circle */
+}
+
+.marker-img {
+    width: 12px;   /* Default was 12px; try 8px or 10px */
+    height: auto; 
+    margin-left: 2px; /* Adds a tiny bit of centering space if needed */
+}
+
+.legend-icon-want {
+    background: #28a745; /* Your Success Green */
+    border: 2px solid #1e7e34;
+}
+
+
+  

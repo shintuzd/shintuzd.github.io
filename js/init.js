@@ -1,7 +1,7 @@
 
 // Places I've Been Map URL
-const placesUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkmSXxg8YWhtkeX7iiBcY-uYjHURNjBdMz9iNUGyUIekHd2Jfp1CqxVRbvwHt-uJZF0ecZWctmHCim/pub?output=csv"
-
+const placesUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkmSXxg8YWhtkeX7iiBcY-uYjHURNjBdMz9iNUGyUIekHd2Jfp1CqxVRbvwHt-uJZF0ecZWctmHCim/pub?gid=1065135092&single=true&output=csv"
+const placesGoToUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkmSXxg8YWhtkeX7iiBcY-uYjHURNjBdMz9iNUGyUIekHd2Jfp1CqxVRbvwHt-uJZF0ecZWctmHCim/pub?gid=287701830&single=true&output=csv"
 // Places I've Ate Map URL
 const foodUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8PYlhZJ6W-p4IJV4rDACwrBENCbrMBQaH2SVtGDnWW24vwfEgXv50UET6sJxgDl39Ox-GJmiukfj3/pub?output=csv"
 
@@ -25,7 +25,7 @@ const foodmap = L.map('the_map2', {
 function addMarker(data, target_map) {
     if (target_map === 3) {
     const redPinIcon = L.icon({
-      iconUrl: "images/80b2b82a0488e38c372a3ff50421a7af.png", // your local image path
+      iconUrl: "../images/80b2b82a0488e38c372a3ff50421a7af.png", // your local image path
       iconSize: [30, 30],   // adjust as needed
       iconAnchor: [16, 30], // bottom center of the pin
       popupAnchor: [0, -45] // popup appears above the pin
@@ -34,7 +34,20 @@ function addMarker(data, target_map) {
     L.marker([data.LAT, data.LON], { icon: redPinIcon })
       .addTo(foodmap)
       .bindPopup(`<h2>${data.Name}</h2>`);
-    } else {
+    } 
+    else if (target_map === 2) {
+    L.circleMarker([data.lat, data.lng], {
+        radius: 5,           // The size of the circle
+        fillColor: "#28a745", // A nice "Success" green
+        color: "#1e7e34",     // A slightly darker green for the border
+        weight: 1,            // The thickness of the border
+        opacity: 1,           // Border opacity
+        fillOpacity: .5      // How transparent the inside is
+    })
+    .addTo(map)
+    .bindPopup(`<h2>${data.city}</h2> <h3>${data.description}</h3>`);
+    }
+    else {
         L.marker([data.lat, data.lng])
         .addTo(map)
         .bindPopup(`<h2>${data.city}</h2> <h3>${data.description}</h3>`);
@@ -109,6 +122,12 @@ function processData(results, tgt_map){
     }
         )}
 
+    else if (tgt_map == 2){
+        results.data.forEach(data => {
+        addMarker(data, 2)
+    }
+        )}
+
     else{
     results.data.forEach(data => {
         if (!data.lat || !data.lng) return;
@@ -160,6 +179,7 @@ function getColor(route_id){
 
 // we will put this comment to remember to call our function later!
 loadData(placesUrl, 1)
+loadData(placesGoToUrl, 2)
 loadData(foodUrl, 3)
 
 // Leaflet tile layer, i.e. the base map
