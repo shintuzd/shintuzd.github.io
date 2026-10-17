@@ -1,509 +1,690 @@
+/* ==========================================================================
+   Tokens
+   ========================================================================== */
+:root {
+  --bg: #fff;
+  --text: #303030;
+  --text-strong: #111;
+  --muted: #666;
+  --subtle: #7f8c9b;
+  --border: #e5eaed;
+  --card-border: #bacdd8;
+  --accent: #0077ff;
+  --accent-soft: #e0efff;
+  --radius: 12px;
+  --content-width: 1100px;
+  --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
 * {
-    box-sizing: border-box;
-  }
-  
-  body {
-    display: grid;
-    grid-template-areas: 
-      "header"
-      "main_content"
-      "footer";
-    grid-template-rows: auto 1fr auto;
-    margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: #fff; 
-    color: #303030;
-    line-height: 1.6;
-  }
-
-  body.full-map-page {
-    overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-  .full-map-page #foodmap {
-    width: 80vw;
-    position: relative;
-    
-    /* 1. Move the left edge to the center of the screen */
-    left: 50%; 
-    
-    /* 2. Pull the map back by half of its OWN width */
-    transform: translateX(-50%); 
-    
-    height: 80vh;
-    border-radius: 8px; /* Keeps the rounded corners since it's not full-screen */
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+html {
+  scroll-behavior: smooth;
 }
-  .full-map-page #travelmap {
-    width: 70vw;
-    height: 80vh;
-    margin: 2rem auto;   /* centers cleanly */
-    border-radius: 8px;
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
-  p {
-    margin: 0;
-  }
-  
-  .main_content {
-    grid-area: main_content;
-    padding: 1rem;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
-  .footer {
-    grid-area: footer;
-    text-align: center;
-    padding: 2rem 1rem;
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  /* Header */
-  .header {
-    grid-area: header;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-  }
-  
-  .header a {
-    text-decoration: none;
-    color: #303030;
-  }
-  
-  .header a:hover {
-    text-decoration: underline;
-  }
-  
-  #plaque {
-    flex: 1;
-    min-width: 200px;
-  }
-  
-  #name {
-    font-size: 2rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: #000;
-  }
-  
-  #subtitle {
-    font-size: 1.5rem;
-    color: #666;
-    margin-top: 0.25rem;
-    align-self: center;
-    font-weight: 100
-  }
-  
-  #navigation {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    font-size: 1rem
-  }
-  
-  /* Hero Section */
-  #hero {
-    text-align: center;
-    margin: 2rem 0;
-  }
-  
-  #hero h1 {
-    color: #303030;
-    font-size: 2.5rem;
-    margin: 0;
-  }
-  
-  #front {
-    margin: 0 1rem;
-  }
-  
-  /* Bio Section */
-  #photobio {
-    display: grid;
-    gap: 1.5rem;
-    justify-items: center;
-    margin: 2rem auto;
-    max-width: 750px;
-  }
-  
-  #pfp {
-    max-width: 200px;
-    width: 100%;
-    border-radius: 8px;
-  }
-  
-  #landing_bio {
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 2;
-    color: #303030;
-    max-width: 100%;
-    text-align: center;
-  }
-  
-  /* About Page */
-  #aboutcontainer {
-    display: grid;
-    gap: 1rem;
-  }
-  
-  #aboutphotobio {
+
+main {
+  flex: 1;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  padding: 0.5rem 1rem;
+  background: var(--text-strong);
+  color: #fff;
+  border-radius: 6px;
+  z-index: 2000;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.header.is-scrolled {
+  border-bottom-color: var(--border);
+}
+
+.header__inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  text-decoration: none;
+  color: var(--text-strong);
+  line-height: 1.2;
+}
+
+.brand__name {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.brand__title {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.nav {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.05rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 50px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav a:hover {
+  background: #f3f5f7;
+}
+
+.nav a[aria-current="page"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+.main_content {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 1rem 1.5rem 3rem;
+}
+
+.page-title {
+  text-align: center;
+  margin: 2rem 0 2.5rem;
+}
+
+.page-title h1 {
+  color: var(--text);
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+}
+
+.page-title p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.section-heading {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 3rem 0 1rem;
+}
+
+.prose {
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  line-height: 1.8;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.button {
+  display: inline-block;
+  border: none;
+  padding: 0.7rem 1.3rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.button--solid {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.button--solid:hover {
+  background-color: #005fcc;
+}
+
+/* ==========================================================================
+   Home
+   ========================================================================== */
+.intro {
   display: grid;
-  grid-template-columns: 1fr 300px;
   gap: 2rem;
-  align-items: start;
-  margin: 2rem auto;
+  align-items: center;
+  justify-items: center;
   max-width: 900px;
+  margin: 2rem auto;
 }
-  
-  #about_bio {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: #303030;
-  }
-  
-  #about_bio span {
-    text-align: center;
-    font-weight: bold;
-    font-style: italic;
-    display: block;
-    margin-bottom: 1rem;
-  }
-  
-  #about_pfp {
-    max-width: 300px;
-    width: 100%;
-    margin: 0 auto;
-  }
-  
-  #afterfirstpg {
-    font-size: 1rem;
-    line-height: 1.8;
-    max-width: 700px;
-    margin: 0 auto 2rem auto;
-  }
-  
-  /* Experience Page */
-  .experience {
-    padding-top: 1rem;
-  }
-  
-  #work_bio {
-    font-size: 0.95rem;
-    line-height: 1.8;
-  }
-  
-  #work_photo {
-    max-width: 300px;
-    width: 100%;
-    margin: 0 auto;
-  }
-  
-  #recent,
-  #second,
-  #third {
-    display: grid;
-    gap: 1.5rem;
-    align-items: center;
-  }
-  
-  /* Blog Cards */
-  #cardokun {
-    display: grid;
-    gap: 2rem;
-    margin: 2rem 0;
-  }
-  
-  .card {
-    background-color: white;
-    border: 1px solid #bacdd8;
-    padding: 1rem;
-    border-radius: 12px;
-  }
-  
-  #cardokun img {
-    width: 100%;
-    border-radius: 12px;
-    height: 200px;
-    object-fit: cover;  
-  }
-  
-  .tag {
-    padding: 4px 8px;
-    border: 1px solid #e5eaed;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #788697;
-  }
-  
-  #cardname {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-top: 1rem;
-  }
-  
-  #cardokun p {
-    font-size: 0.9rem;
-    color: #7f8c9b;
-    line-height: 1.5;
-    margin-bottom: 0.5rem;
-  }
-  
-  #cardokun button {
-    border: none;
-    padding: 0.75rem 1.25rem;
-    border-radius: 50px;
-    font-weight: 600;
-    color: #0077ff;
-    background-color: #e0efff;
-    margin: 0 auto;
-    display: block;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  
-  #cardokun button:hover {
-    background-color: #0077ff;
-    color: #e0efff;
-  }
-  
-  /* Footer */
-  hr.solid {
-    border-top: 2px solid #bbb;
-    margin: 1rem auto;
-    max-width: 900px;
-  }
-  
-  /* Maps */
-  #restaurant_portion {
-    display: grid;
-    gap: 2rem;
-  }
-  
-  #restaurant_interface {
-    display: grid;
-    gap: 1.5rem;
-  }
-  
-  #restaurant_map {
-    display: grid;
-    gap: 1rem;
-  }
-  
-  #restaurant_survey {
-    height: auto;
-  }
-  
-  #the_map,
-  #the_map2 {
-    height: 60vh;
-    margin: 1rem auto;
-    width: 100%;
-    border-radius: 8px;
-  }
 
+.intro__photo {
+  width: 100%;
+  max-width: 280px;
+  border-radius: var(--radius);
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
 
-   /* Large screens */
+.intro__eyebrow {
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
 
-  @media (min-width: 1200px) {
+.intro__heading {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
 
-    .main_content {
-    max-width: 1550px; /* Increased from 1000px */
-  }
+.intro__bio {
+  line-height: 1.9;
+}
 
-    .header {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-  
-    #photobio {
-      grid-template-columns: 1fr 2fr;
-      text-align: left;
-      align-items: center;
-    }
-  
-    #landing_bio {
-      text-align: left;
-      padding-left: 1rem;
-      line-height: 2;
-    }
-  
-    #aboutphotobio {
-      grid-template-columns: 2fr 2.5fr;
-      align-items: center;
-    }
-  
-    #recent,
-    #second,
-    #third {
-      grid-template-columns: 1fr 1fr;
-    }
-  
-    #cardokun {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  
-    #restaurant_interface {
-      grid-template-columns: 2fr 1fr;
-    }
-    
-    #hero h1 {
-      font-size: 3rem;
-    }
-  
-    #pfp {
-      max-width: 270px;
-    }
-  
-    #work_photo {
-      max-width: 400px;
-    }
+.intro__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
 
-    #landing_bio {
-        text-align: left;
-        padding-left: 1rem;
-        line-height: 2.25;
-      }
+/* ==========================================================================
+   About
+   ========================================================================== */
+.about-lead {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem;
+}
 
-    #plaque {
-        margin-left: 6rem;
-        margin-top: 1rem;
+.about-lead__photo {
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+}
 
-    }
-    #navigation {
-        gap: 6rem;
-        font-size: 1.25rem;
-        margin-right: 12rem
-    }
-  }
-  
-  /* Medium screens */
-  @media (min-width: 768px) and (max-width: 1199px) {
-    .header {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-  
-    #photobio {
-      grid-template-columns: 1fr 2fr;
-      text-align: left;
-      align-items: center;
-    }
-  
-    #landing_bio {
-      text-align: left;
-      padding-left: 1rem;
-      line-height: 2;
-    }
-  
-    #aboutphotobio {
-      grid-template-columns: 2fr 2fr;
-      align-items: center;
-    }
-  
-    #recent,
-    #second,
-    #third {
-      grid-template-columns: 1fr 1fr;
-    }
-  
-    #cardokun {
-      grid-template-columns: 1fr 1fr;
-    }
-  
-    #restaurant_interface {
-      grid-template-columns: 2fr 1fr;
-    }
+.about-lead__eyebrow {
+  font-weight: 700;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
 
-    #navigation {
-        gap: 6rem;
-    }
+.about-lead p {
+  line-height: 1.8;
+}
 
-    plaque {
-      margin-left: 2rem;
-      margin-top: 1rem;
+/* ==========================================================================
+   Experience
+   ========================================================================== */
+.job {
+  display: grid;
+  gap: 1.5rem 3rem;
+  align-items: center;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+}
 
-  }
+.job:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
 
+.job__org {
+  font-size: 1.6rem;
+  line-height: 1.25;
+  margin: 0;
+}
 
-  }
-  
- 
- /* Small screens */
-  
-  @media (max-width: 767px) {
-    .header {
-      flex-direction: column;
-      align-items: center; 
-      gap: 1rem;
-      text-align: center;
-    }
-  
-    #plaque {
-      text-align: center; 
-    }
-  
-    #navigation {
-      justify-content: center; 
-      gap: 1rem
-    }
+.job__role {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin: 0.25rem 0 1rem;
+}
 
-    .home #hero {
-      display:none;
-    }
+.job__body {
+  font-size: 0.97rem;
+  line-height: 1.8;
+}
 
-    #aboutphotobio {
-    grid-template-columns: 1fr; 
-  }
+.job__body ul {
+  padding-left: 1.25rem;
+  margin: 0;
+}
 
-  #about_pfp {
-    order: -1; 
-    justify-self: center;
-    max-width: 250px; 
-    margin-bottom: 1rem;
-  }
-  }
+.job__photo {
+  width: 100%;
+  border-radius: var(--radius);
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
 
-  /* Style for the legend container */
+/* ==========================================================================
+   Project cards
+   ========================================================================== */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.filter {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  background: #fff;
+  color: #788697;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter:hover {
+  border-color: var(--card-border);
+  color: var(--text);
+}
+
+.filter[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft);
+  color: var(--accent);
+}
+
+.cards {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid var(--card-border);
+  padding: 1rem;
+  border-radius: var(--radius);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card[hidden] {
+  display: none;
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(16, 40, 70, 0.08);
+}
+
+.card__image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f3f5f7;
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #788697;
+}
+
+.card__title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.card__title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* Makes the whole card clickable via the title link */
+.card__title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+}
+
+.card__desc {
+  font-size: 0.9rem;
+  color: var(--subtle);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.card__cta {
+  align-self: flex-start;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.card:hover .card__cta {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Gallery (HHH Hub)
+   ========================================================================== */
+.gallery {
+  display: grid;
+  gap: 2rem;
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+.gallery img {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footer {
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.footer__inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer__cta {
+  margin: 0;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.footer__links {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__links a {
+  color: var(--text);
+}
+
+.footer__copy {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Maps
+   ========================================================================== */
+.map {
+  height: 60vh;
+  min-height: 360px;
+  width: 100%;
+  margin: 1rem auto 2.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  z-index: 0;
+}
+
+.map--full {
+  height: 75vh;
+}
+
+.map-status {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.leaflet-popup-content h2 {
+  font-size: 1rem;
+  margin: 0 0 0.25rem;
+}
+
+.leaflet-popup-content h3 {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+}
+
 .info.legend {
-    padding: 10px;
-    font-family: system-ui, sans-serif;
-    background: white;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    line-height: 24px;
-    color: #333;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  line-height: 24px;
+  color: #333;
 }
 
-/* Style for the little icons in the legend */
 .legend i {
-    width: 18px;
-    height: 18px;
-    float: left;
-    margin-right: 10px;
-    opacity: 0.7;
-    border-radius: 50%; /* Makes the Want-to-Go icon a circle */
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin: 3px 10px 0 0;
+  opacity: 0.7;
+  border-radius: 50%;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .marker-img {
-    width: 12px;   /* Default was 12px; try 8px or 10px */
-    height: auto; 
-    margin-left: 2px; /* Adds a tiny bit of centering space if needed */
+  width: 12px;
+  height: auto;
+  margin: 0 3px;
 }
 
 .legend-icon-want {
-    background: #28a745; /* Your Success Green */
-    border: 2px solid #1e7e34;
+  background: #28a745;
+  border: 2px solid #1e7e34;
 }
 
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (min-width: 768px) {
+  .intro {
+    grid-template-columns: 1fr 2fr;
+    justify-items: start;
+  }
 
-  
+  .about-lead {
+    grid-template-columns: 1.4fr 1fr;
+  }
+
+  .job {
+    grid-template-columns: 1.3fr 1fr;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .header__inner {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .brand__name {
+    font-size: 1.4rem;
+  }
+
+  .nav {
+    justify-content: center;
+  }
+
+  .nav a {
+    font-size: 0.95rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .main_content {
+    padding: 0.5rem 1rem 2rem;
+  }
+
+  .intro {
+    text-align: center;
+  }
+
+  .intro__actions {
+    justify-content: center;
+  }
+
+  .about-lead__photo {
+    order: -1;
+    max-width: 260px;
+  }
+
+  .job__photo {
+    order: -1;
+  }
+
+  .footer__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}

@@ -1,60 +1,64 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title> Mohammed Azad</title>
-        <meta charset="utf-8" />
-        <link rel="shortcut icon" href="#">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../styles/style.css">
+<html lang="en">
 
-        <!-- Leaflet's css-->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homelessness and Housing Hub | Mohammed Azad</title>
+    <meta name="description" content="Screenshots of the LA City Controller's Homelessness and Housing Hub dashboard, retired in 2022.">
+    <link rel="canonical" href="https://shintuzd.com/docs/HHHhub.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Homelessness and Housing Hub | Mohammed Azad">
+    <meta property="og:description" content="Screenshots of the LA City Controller's Homelessness and Housing Hub dashboard, retired in 2022.">
+    <meta property="og:image" content="https://shintuzd.com/images/web/og-image.jpg">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
 
-        <!-- Leaflet's JavaScript-->
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-        <script src='https://unpkg.com/leaflet-arc/bin/leaflet-arc.min.js'></script>
-    </head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
 
-    <body>
-        <header class="header">
-            <div id="plaque">
-                <a href="../index.html" id="name">Mohammed Azad</a>
-                <h2 id="subtitle">Data Analyst</h2>
-            </div>
-            <nav id="navigation">
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="header">
+        <div class="header__inner">
+            <a href="../index.html" class="brand">
+                <span class="brand__name">Mohammed Azad</span>
+                <span class="brand__title">Data Analyst</span>
+            </a>
+            <nav class="nav" aria-label="Main">
                 <a href="../about.html">About Me</a>
                 <a href="../experience.html">Experience</a>
                 <a href="../projects.html">Projects</a>
             </nav>
-        </header>
-
-        <div class="main_content">
-            <div id="contents">
-                <div id="front">
-                <div id="hero">
-                    <h1> Homelessness and Housing Hub </h1>
-                    <p> <em> Click <a href="https://lacontroller.maps.arcgis.com/apps/dashboards/b97e8c693b18495083ca6ef1e5a4d43c " target="_blank">here</a> to view the live dashboard. Please note that this project was retired in 2022.</em> </p>
-                    <p> <em> Please see below for screenshots of the project. </em> </p>
-                    <br></br>
-                    <img id="Visual1A" src="../images/Visual 1A - Homelessness and Housing Hub.png"
-                        alt="Visual 1A - Homelessness and Housing Hub" style="max-width: 935px;max-height: 935px">
-                        <br></br>
-                    <img id="Visual1B" src="../images/Visual 1B - Homelessness and Housing Hub.png"
-                        alt="Visual 1B - Homelessness and Housing Hub" style="max-width: 935px;max-height: 935px">
-                        <br></br>
-                    <img id="Visual1C" src="../images/Visual 1C - Homelessness and Housing Hub.png"
-                        alt="Visual 1C - Homelessness and Housing Hub" style="max-width: 935px;max-height: 935px">
-                </div>
-                <div id="exp">
-                    <div class="experience" id="recent">
-
         </div>
-        <footer class="footer"> 
-            <hr class="solid">
-            <p style="line-height: 25px;">Get in Touch! <br>
-            E-Mail: shintuzd@gmail.com</p>
-            <p style="text-align: right"> © 2026 Mohammed Azad</p>
-        </footer>
-    </body>
+    </header>
+
+    <main id="main" class="main_content">
+        <div class="page-title">
+            <h1>Homelessness and Housing Hub</h1>
+            <p><em>Click <a href="https://lacontroller.maps.arcgis.com/apps/dashboards/b97e8c693b18495083ca6ef1e5a4d43c" target="_blank" rel="noopener">here</a> to view the live dashboard. Please note that this project was retired in 2022.</em></p>
+            <p><em>Please see below for screenshots of the project.</em></p>
+        </div>
+        <div class="gallery">
+            <img src="../images/web/hhh-1.webp" width="1800" height="1411" alt="Homelessness and Housing Hub dashboard, view 1">
+            <img src="../images/web/hhh-2.webp" width="1800" height="1413" loading="lazy" alt="Homelessness and Housing Hub dashboard, view 2">
+            <img src="../images/web/hhh-3.webp" width="1800" height="1393" loading="lazy" alt="Homelessness and Housing Hub dashboard, view 3">
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__cta">Get in touch!</p>
+            <ul class="footer__links">
+                <li><a href="mailto:shintuzd@gmail.com">shintuzd@gmail.com</a></li>
+                <li><a href="https://github.com/shintuzd" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+            <p class="footer__copy">© <span data-year>2026</span> Mohammed Azad</p>
+        </div>
+    </footer>
+    <script src="../js/site.js"></script>
+</body>
 </html>

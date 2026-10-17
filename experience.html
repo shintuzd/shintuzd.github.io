@@ -1,90 +1,99 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title> Mohammed Azad</title>
-        <meta charset="utf-8" />
-        <link rel="shortcut icon" href="#">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles/style.css">
+<html lang="en">
 
-        <!-- Leaflet's css-->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience | Mohammed Azad</title>
+    <meta name="description" content="Mohammed Azad's public-sector experience with LA Civil Rights, the Los Angeles City Controller, and the Office of Mayor Eric Garcetti.">
+    <link rel="canonical" href="https://shintuzd.com/experience.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Experience | Mohammed Azad">
+    <meta property="og:description" content="Public-sector data and policy work across the City of Los Angeles.">
+    <meta property="og:url" content="https://shintuzd.com/experience.html">
+    <meta property="og:image" content="https://shintuzd.com/images/web/og-image.jpg">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
-        <!-- Leaflet's JavaScript-->
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
 
-    </head>
-
-    <body>
-        <header class="header">
-            <div id="plaque">
-                <a href="index.html" id="name">Mohammed Azad</a>
-                <h2 id="subtitle">Data Analyst</h2>
-            </div>
-            <nav id="navigation">
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="header">
+        <div class="header__inner">
+            <a href="index.html" class="brand">
+                <span class="brand__name">Mohammed Azad</span>
+                <span class="brand__title">Data Analyst</span>
+            </a>
+            <nav class="nav" aria-label="Main">
                 <a href="about.html">About Me</a>
-                <a href="experience.html">Experience</a>
+                <a href="experience.html" aria-current="page">Experience</a>
                 <a href="projects.html">Projects</a>
             </nav>
-        </header>
-
-        <div class="main_content">
-            <div id="contents">
-                <div id="front">
-                <div id="hero">
-                    <h1> Experience </h1>
-                    <p> <em> This section is still being updated! </em> </p>
-                </div>
-                <div id="exp">
-                    <div class="experience" id="recent">
-                        <div id="work_bio">
-                            <h1> Los Angeles Civil Rights Department</h1>
-                            <h2 id="subtitle"> Policy Fellow</h2>
-                            <p> The <a id="companyname" href="https://civilandhumanrights.lacity.gov" target="_blank"> Civil + Human Rights and Equity Department</a>, or LA Civil Rights for short, is focused on reducing bias and injustice, and promoting equity in the City of Los Angeles. As a Policy Fellow, I mainly supported the Office of Racial Equity’s policy work through research, data analysis, and stakeholder engagement. Some of my contributions include:
-                            </p>
-                            <ul> 
-                                <li> <a href='https://clkrep.lacity.org/onlinedocs/2022/22-0102_misc_3-17.pdf' target="_blank"> Data Analysis for the Report on Violence Against Black & Latina Women  </a></li>
-                                <li> Policy support for oversight of Artificial Intelligence (AI) within LA </li>
-                                <li> <a href='https://storymaps.arcgis.com/stories/4d771e9bbdef4a0385d3527541447a59' target="_blank"> StoryMap of the City’s Digital Inclusion efforts </a></li>
-                            </ul>
-                        </div>
-                        <img id="work_photo" src="images/02.21.23 Mayor Bass an LA Civil Rights team 2.jpeg"
-                        alt="LA Civil Rights Staff Photo" style="max-width: 435px;max-height: 435px">
-                    </div>
-                    <div class="experience" id="second">
-                        <div id="work_bio">
-                            <h1> Los Angeles City Controller</h1>
-                            <h2 id="subtitle"> Innovation Aide</h2>
-                            <p> The <a id="companyname"href="https://controller.lacity.gov" target="_blank">Los Angeles City Controller</a> is the elected paymaster, auditor, and chief accounting officer for the City of Los Angeles. As an Innovation Aide, I supported the office’s goal to provide transparency on City operations, policies, metrics, and data. This includes managing and analyzing data, creating public-facing dashboards and story maps, and writing reports with research and recommendations with equity gaps that persist. Some of my contributions include:
-                            </p>
-                            <ul> 
-                                <li> Supporting department project to analyze City-collected Fines and Fees </li>
-                                <li> <a href='https://lacontroller.maps.arcgis.com/apps/dashboards/b97e8c693b18495083ca6ef1e5a4d43c' target="_blank"> Housing and Homelessness Hub </a></li>
-                                <li> <a href='https://storymaps.arcgis.com/stories/ef7618624f2f4628883dd9f6ec8d4660' target="_blank"> Latinx Landmarks in Los Angeles StoryMap </a></li>
-                                </ul>
-                        </div>
-                        <img id="work_photo" src="images/Visual 1A - Homelessness and Housing Hub.png"
-                        alt="LA City Controller's Homelessness and Housing Hub">
-                    </div>
-                    <div class="experience" id="third">
-                        <div id="work_bio">
-                            <h1> Los Angeles Mayor's Office of Eric Garcetti</h1>
-                            <h2 id="subtitle"> Public Engagement Intern</h2>
-                            <p> Los Angeles Mayor Eric Garcetti’s Office of Public Engagement acted as a point of coordination for dialogue between the Mayor’s Office and the diverse constituents and communities of Los Angeles. As a Public Engagement Intern for the Central Area, I supported the Mayor’s vision to create an inclusive, transparent, accountable city government. My work consisted of developing outreach strategies to engage community stakeholders, drafting logistical paperwork for the Mayor, and coordinating the Mayor’s Youth Council. </p>
-                        </div>
-                        <img id="work_photo" src="images/pexels-rdne-stock-project-8783588.jpg"
-                        alt="Skyline Photo of Los Angeles City Hall by RDNE Stock Project">
-                    </div>
-                </div>
-                </div>
-            </div>
         </div>
-        <footer class="footer"> 
-            <hr class="solid">
-            <p style="line-height: 25px;">Get in Touch! <br>
-            E-Mail: shintuzd@gmail.com</p>
-            <p style="text-align: right"> © 2026 Mohammed Azad</p>
-        </footer>
-    </body>
+    </header>
+
+    <main id="main" class="main_content">
+        <div class="page-title">
+            <h1>Experience</h1>
+            <p><em>This section is still being updated!</em></p>
+        </div>
+
+        <article class="job">
+            <div class="job__body">
+                <h2 class="job__org">Los Angeles Civil Rights Department</h2>
+                <p class="job__role">Policy Fellow</p>
+                <p>The <a href="https://civilandhumanrights.lacity.gov" target="_blank" rel="noopener">Civil + Human Rights and Equity Department</a>, or LA Civil Rights for short, is focused on reducing bias and injustice, and promoting equity in the City of Los Angeles. As a Policy Fellow, I mainly supported the Office of Racial Equity’s policy work through research, data analysis, and stakeholder engagement. Some of my contributions include:</p>
+                <ul>
+                    <li><a href="https://clkrep.lacity.org/onlinedocs/2022/22-0102_misc_3-17.pdf" target="_blank" rel="noopener">Data Analysis for the Report on Violence Against Black &amp; Latina Women</a></li>
+                    <li>Policy support for oversight of Artificial Intelligence (AI) within LA</li>
+                    <li><a href="https://storymaps.arcgis.com/stories/4d771e9bbdef4a0385d3527541447a59" target="_blank" rel="noopener">StoryMap of the City’s Digital Inclusion efforts</a></li>
+                </ul>
+            </div>
+            <img class="job__photo" src="images/web/exp-civil-rights.webp" width="1000" height="564" loading="lazy"
+                alt="LA Civil Rights staff photo with Mayor Karen Bass">
+        </article>
+
+        <article class="job">
+            <div class="job__body">
+                <h2 class="job__org">Los Angeles City Controller</h2>
+                <p class="job__role">Innovation Aide</p>
+                <p>The <a href="https://controller.lacity.gov" target="_blank" rel="noopener">Los Angeles City Controller</a> is the elected paymaster, auditor, and chief accounting officer for the City of Los Angeles. As an Innovation Aide, I supported the office’s goal to provide transparency on City operations, policies, metrics, and data. This includes managing and analyzing data, creating public-facing dashboards and story maps, and writing reports with research and recommendations with equity gaps that persist. Some of my contributions include:</p>
+                <ul>
+                    <li>Supporting department project to analyze City-collected Fines and Fees</li>
+                    <li><a href="docs/HHHhub.html">Housing and Homelessness Hub</a></li>
+                    <li><a href="https://storymaps.arcgis.com/stories/ef7618624f2f4628883dd9f6ec8d4660" target="_blank" rel="noopener">Latinx Landmarks in Los Angeles StoryMap</a></li>
+                </ul>
+            </div>
+            <img class="job__photo" src="images/web/proj-hhh.webp" width="800" height="627" loading="lazy"
+                alt="LA City Controller's Homelessness and Housing Hub dashboard">
+        </article>
+
+        <article class="job">
+            <div class="job__body">
+                <h2 class="job__org">Los Angeles Mayor's Office of Eric Garcetti</h2>
+                <p class="job__role">Public Engagement Intern</p>
+                <p>Los Angeles Mayor Eric Garcetti’s Office of Public Engagement acted as a point of coordination for dialogue between the Mayor’s Office and the diverse constituents and communities of Los Angeles. As a Public Engagement Intern for the Central Area, I supported the Mayor’s vision to create an inclusive, transparent, accountable city government. My work consisted of developing outreach strategies to engage community stakeholders, drafting logistical paperwork for the Mayor, and coordinating the Mayor’s Youth Council.</p>
+            </div>
+            <img class="job__photo" src="images/web/exp-city-hall.webp" width="1000" height="667" loading="lazy"
+                alt="Skyline photo of Los Angeles City Hall by RDNE Stock Project">
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__cta">Get in touch!</p>
+            <ul class="footer__links">
+                <li><a href="mailto:shintuzd@gmail.com">shintuzd@gmail.com</a></li>
+                <li><a href="https://github.com/shintuzd" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+            <p class="footer__copy">© <span data-year>2026</span> Mohammed Azad</p>
+        </div>
+    </footer>
+    <script src="js/site.js"></script>
+</body>
 </html>

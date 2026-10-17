@@ -1,166 +1,126 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title> Mohammed Azad</title>
-        <meta charset="utf-8" />
-        <link rel="shortcut icon" href="#">
-        <link rel="stylesheet" href="styles/style.css">
+<html lang="en">
 
-        <!-- Leaflet's css-->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Mohammed Azad</title>
+    <meta name="description" content="Data analysis, dashboards, StoryMaps, and maps by Mohammed Azad, from City of Los Angeles equity work to personal projects.">
+    <link rel="canonical" href="https://shintuzd.com/projects.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Projects | Mohammed Azad">
+    <meta property="og:description" content="Data analysis, dashboards, StoryMaps, and maps for the City of Los Angeles and beyond.">
+    <meta property="og:url" content="https://shintuzd.com/projects.html">
+    <meta property="og:image" content="https://shintuzd.com/images/web/og-image.jpg">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
-        <!-- Leaflet's JavaScript-->
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    </head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
 
-    <body>
-        <header class="header">
-            <div id="plaque">
-                <a href="index.html" id="name">Mohammed Azad</a>
-                <h2 id="subtitle">Data Analyst</h2>
-            </div>
-            <nav id="navigation">
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="header">
+        <div class="header__inner">
+            <a href="index.html" class="brand">
+                <span class="brand__name">Mohammed Azad</span>
+                <span class="brand__title">Data Analyst</span>
+            </a>
+            <nav class="nav" aria-label="Main">
                 <a href="about.html">About Me</a>
                 <a href="experience.html">Experience</a>
-                <a href="projects.html">Projects</a>
+                <a href="projects.html" aria-current="page">Projects</a>
             </nav>
-        </header>
+        </div>
+    </header>
 
-        <div class="main_content">
-            <div id="contents">
-                <div id="front">
-                <div id="hero">
-                    <h1> Projects </h1>
-                </div>
-        
-                <div id="cardokun"> 
-
-                    <div id="card_container2">
-                        <div class="card">
-                            <img src="images/Screenshot 2023-08-29 at 2.14.19 AM.png" alt="Map of Hispanic Distribution in Los Angeles">
-                            <div class="card__details">
-                                <span class="tag">City of LA</span>
-                                <span class="tag">Resource</span>
-                                <div id="cardname">EnviroScreen LA</div>
-                                <p></p>
-                                <p> Using data from CalEnviroScreen 4.0, I limited the variables to focus solely on the City of Los Angeles. These maps are faster and more user friendly for LA's organizers and decision makers.</p>
-                                <a href='https://shintuzd.github.io/EnviroScreenLA/' target="_blank"><button>Read more</button></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="card_container">
-                        <div class="card">
-                            <img src="images/CHRD_Final_Homepage_Hero_10062020.jpg.webp.jpeg" alt="Diversity Sihlouette">
-                            <div class="card__details">
-                                <span class="tag">City of LA</span>
-                                <span class="tag">Data Analysis</span>
-                                <!-- A div with name class for the name of the card -->
-                                <div id="cardname">Progress & Gaps in the City's Workforce</div>
-                                <p></p>
-                                <p> Using the LA City Controller's 2022 Payroll Data, I conducted a simple analysis of workforce demographics and total pay by gender and ethnicity.</p>
-                                <a href='docs/LA City Workforce Analysis (2022).html' target="_blank"><button>Read more</button></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="card_container2">
-                        <div class="card">
-                        <img src="images/Screenshot 2025-11-22 at 11.08.14 PM.png" alt="Cover for Digital Inclusion in Los Angeles StoryMap">
-                        <div class="card__details">
-                            <span class="tag">City of LA</span>
-                            <span class="tag">Resource</span>
-                            <span class="tag">Equity</span>
-                            <div id="cardname">Digital Inclusion in Los Angeles</div>
-                            <p></p>
-                            <p>This StoryMap examines the issue of the digital divide in Los Angeles. As technology grows in every facet of our lives, it's imperative that everyone has access to technology. This resource analyzes the inequity across Los Angeles, and what the City of Los Angeles is doing to bridge the digital divide.</p>
-                            <a href='https://storymaps.arcgis.com/stories/4d771e9bbdef4a0385d3527541447a59' target="_blank"><button>Read more</button></a>
-                        </div>
-                        </div>
-                    </div>
-
-                    <div id="card_container2">
-                        <div class="card">
-                            <img src="images/Screenshot 2025-11-23 at 7.10.27 PM.png" alt="Presentation Cover for the Report regarding Violence Against Black & Latina Women">
-                            <div class="card__details">
-                            <span class="tag">City of LA</span>
-                            <span class="tag">Data Analysis</span>
-                            <span class="tag">Equity</span>
-                            <div id="cardname">Violence Against Black & Latina Women</div>
-                            <p></p>
-                            <p>This report recognizes growing violence against women of color and acknowledges opportunities to bolster safety for communities most impacted by violence. As a co-author, I analyzed LAPD data to report the crime statistics of violence against women across the City of LA.</p>
-                            <a href='https://cityclerk.lacity.org/onlinedocs/2022/22-0102_misc_3-17.pdf' target="_blank"><button>Read more</button></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="card_container2">
-                        <div class="card">
-                            <img src="/images/Visual 1A - Homelessness and Housing Hub.png" alt="Screenshot of Homelessness and Housing Hub">
-                            <div class="card__details">
-                                <span class="tag">City of LA</span>
-                                <span class="tag">Homelessness</span>
-                                <span class="tag">Housing</span>
-                                <span class="tag">Data Analysis</span>
-                                <div id="cardname">Homelessness & Housing Hub</div>
-                                <p></p>
-                                <p> This dashboard was created to visualize progress being made in regards to Prop HHH, and various statistics/resources pertaining to the issue of homelessness in Los Angeles. Please note that this dashboard was retired on December 2022.</p>
-                                <a href='docs/HHHhub.html'><button>Read more</button></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="card_container2">
-                        <div class="card">
-                            <img src="images/Screenshot 2025-11-22 at 9.54.41 PM.png" alt="Cover of Latinx Heritage Month 2022 Storymap">
-                            <div class="card__details">
-                                <span class="tag">City of LA</span>
-                                <span class="tag">Resource</span>
-                                <span class="tag">Culture</span>
-                                <div id="cardname">Latinx Heritage Month 2022</div>
-                                <p></p>
-                                <p> This StoryMap was created for Latinx Heritage Month in 2022. It provides a guided tour throughout Hispanic Heritage locations in LA, and data visualizations hiighting pay equity gaps among Hispanic City employees.</p>
-                                <a href='https://storymaps.arcgis.com/stories/ef7618624f2f4628883dd9f6ec8d4660' target="_blank"><button>Read more</button></a>
-                            </div>
-                        </div>
-                    </div>
-
-                                        <div id="card_container2">
-                        <div class="card">
-                            <img src="images/Screenshot 2026-02-08 at 6.36.12 PM.png" alt="Map of Hispanic Distribution in Los Angeles">
-                            <div class="card__details">
-                                <span class="tag">Personal</span>
-                                <div id="cardname">Every Restaurant I've Ever Eaten At</div>
-                                <p></p>
-                                <p> I started mapping every restaurant or venue I've ever eaten at. Check it out!</p>
-                                <a href='docs/FoodMap.html' target="_blank"><button>Read more</button></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="card_container2">
-                        <div class="card">
-                            <img src="images/Screenshot 2026-02-08 at 6.33.36 PM.png" alt="Map of Places I've Been To and Want to Go To">
-                            <div class="card__details">
-                                <span class="tag">Personal</span>
-                                <div id="cardname">Travel Map</div>
-                                <p></p>
-                                <p> Where have I gone? Where do I want to go? Here's a map for that.</p>
-                                <a href='docs/TravelMap.html' target="_blank"><button>Read more</button></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
+    <main id="main" class="main_content">
+        <div class="page-title">
+            <h1>Projects</h1>
         </div>
 
-        <footer class="footer"> 
-            <hr class="solid">
-            <p style="line-height: 25px;">Get in Touch! <br>
-            E-Mail: shintuzd@gmail.com</p>
-            <p style="text-align: right"> © 2026 Mohammed Azad</p>
-        </footer>
-    </body>
+        <div class="filters" role="group" aria-label="Filter projects by topic">
+                <button type="button" class="filter" data-filter="all" aria-pressed="true">All</button>
+                <button type="button" class="filter" data-filter="Data Analysis" aria-pressed="false">Data Analysis</button>
+                <button type="button" class="filter" data-filter="Resource" aria-pressed="false">Resource</button>
+                <button type="button" class="filter" data-filter="Equity" aria-pressed="false">Equity</button>
+                <button type="button" class="filter" data-filter="Housing" aria-pressed="false">Housing</button>
+                <button type="button" class="filter" data-filter="Personal" aria-pressed="false">Personal</button>
+        </div>
+
+        <ul class="cards">
+                <li class="card" data-tags="City of LA,Resource">
+                    <img class="card__image" src="images/web/proj-enviroscreen.webp" width="800" height="490" alt="Map of CalEnviroScreen scores across the City of Los Angeles">
+                    <ul class="card__tags"><li class="tag">City of LA</li><li class="tag">Resource</li></ul>
+                    <h2 class="card__title"><a href="https://shintuzd.github.io/EnviroScreenLA/" target="_blank" rel="noopener">EnviroScreen LA</a></h2>
+                    <p class="card__desc">Using data from CalEnviroScreen 4.0, I limited the variables to focus solely on the City of Los Angeles. These maps are faster and more user-friendly for LA's organizers and decision makers.</p>
+                    <span class="card__cta" aria-hidden="true">Read more ↗</span>
+                </li>
+                <li class="card" data-tags="City of LA,Data Analysis">
+                    <img class="card__image" src="images/web/proj-workforce.webp" width="800" height="139" alt="Silhouettes of a diverse group of people">
+                    <ul class="card__tags"><li class="tag">City of LA</li><li class="tag">Data Analysis</li></ul>
+                    <h2 class="card__title"><a href="docs/LA City Workforce Analysis (2022).html">Progress &amp; Gaps in the City's Workforce</a></h2>
+                    <p class="card__desc">Using the LA City Controller's 2022 Payroll Data, I conducted a simple analysis of workforce demographics and total pay by gender and ethnicity.</p>
+                    <span class="card__cta" aria-hidden="true">Read more →</span>
+                </li>
+                <li class="card" data-tags="City of LA,Resource,Equity">
+                    <img class="card__image" src="images/web/proj-digital-inclusion.webp" width="800" height="424" alt="Cover for the Digital Inclusion in Los Angeles StoryMap">
+                    <ul class="card__tags"><li class="tag">City of LA</li><li class="tag">Resource</li><li class="tag">Equity</li></ul>
+                    <h2 class="card__title"><a href="https://storymaps.arcgis.com/stories/4d771e9bbdef4a0385d3527541447a59" target="_blank" rel="noopener">Digital Inclusion in Los Angeles</a></h2>
+                    <p class="card__desc">This StoryMap examines the issue of the digital divide in Los Angeles. As technology grows in every facet of our lives, it's imperative that everyone has access to technology. This resource analyzes the inequity across Los Angeles, and what the City of Los Angeles is doing to bridge the digital divide.</p>
+                    <span class="card__cta" aria-hidden="true">Read more ↗</span>
+                </li>
+                <li class="card" data-tags="City of LA,Data Analysis,Equity">
+                    <img class="card__image" src="images/web/proj-violence-report.webp" width="800" height="388" loading="lazy" alt="Presentation cover for the report on Violence Against Black &amp; Latina Women">
+                    <ul class="card__tags"><li class="tag">City of LA</li><li class="tag">Data Analysis</li><li class="tag">Equity</li></ul>
+                    <h2 class="card__title"><a href="https://cityclerk.lacity.org/onlinedocs/2022/22-0102_misc_3-17.pdf" target="_blank" rel="noopener">Violence Against Black &amp; Latina Women</a></h2>
+                    <p class="card__desc">This report recognizes growing violence against women of color and acknowledges opportunities to bolster safety for communities most impacted by violence. As a co-author, I analyzed LAPD data to report the crime statistics of violence against women across the City of LA.</p>
+                    <span class="card__cta" aria-hidden="true">Read more ↗</span>
+                </li>
+                <li class="card" data-tags="City of LA,Homelessness,Housing,Data Analysis">
+                    <img class="card__image" src="images/web/proj-hhh.webp" width="800" height="627" loading="lazy" alt="Screenshot of the Homelessness and Housing Hub dashboard">
+                    <ul class="card__tags"><li class="tag">City of LA</li><li class="tag">Homelessness</li><li class="tag">Housing</li><li class="tag">Data Analysis</li></ul>
+                    <h2 class="card__title"><a href="docs/HHHhub.html">Homelessness &amp; Housing Hub</a></h2>
+                    <p class="card__desc">This dashboard was created to visualize progress being made in regards to Prop HHH, and various statistics/resources pertaining to the issue of homelessness in Los Angeles. Please note that this dashboard was retired on December 2022.</p>
+                    <span class="card__cta" aria-hidden="true">Read more →</span>
+                </li>
+                <li class="card" data-tags="City of LA,Resource,Culture">
+                    <img class="card__image" src="images/web/proj-latinx-heritage.webp" width="800" height="431" loading="lazy" alt="Cover of the Latinx Heritage Month 2022 StoryMap">
+                    <ul class="card__tags"><li class="tag">City of LA</li><li class="tag">Resource</li><li class="tag">Culture</li></ul>
+                    <h2 class="card__title"><a href="https://storymaps.arcgis.com/stories/ef7618624f2f4628883dd9f6ec8d4660" target="_blank" rel="noopener">Latinx Heritage Month 2022</a></h2>
+                    <p class="card__desc">This StoryMap was created for Latinx Heritage Month in 2022. It provides a guided tour throughout Hispanic Heritage locations in LA, and data visualizations highlighting pay equity gaps among Hispanic City employees.</p>
+                    <span class="card__cta" aria-hidden="true">Read more ↗</span>
+                </li>
+                <li class="card" data-tags="Personal">
+                    <img class="card__image" src="images/web/proj-foodmap.webp" width="800" height="496" loading="lazy" alt="Map of every restaurant I've eaten at">
+                    <ul class="card__tags"><li class="tag">Personal</li></ul>
+                    <h2 class="card__title"><a href="docs/FoodMap.html">Every Restaurant I've Ever Eaten At</a></h2>
+                    <p class="card__desc">I started mapping every restaurant or venue I've ever eaten at. Check it out!</p>
+                    <span class="card__cta" aria-hidden="true">Read more →</span>
+                </li>
+                <li class="card" data-tags="Personal">
+                    <img class="card__image" src="images/web/proj-travelmap.webp" width="800" height="499" loading="lazy" alt="Map of places I've been to and want to go to">
+                    <ul class="card__tags"><li class="tag">Personal</li></ul>
+                    <h2 class="card__title"><a href="docs/TravelMap.html">Travel Map</a></h2>
+                    <p class="card__desc">Where have I gone? Where do I want to go? Here's a map for that.</p>
+                    <span class="card__cta" aria-hidden="true">Read more →</span>
+                </li>
+        </ul>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__cta">Get in touch!</p>
+            <ul class="footer__links">
+                <li><a href="mailto:shintuzd@gmail.com">shintuzd@gmail.com</a></li>
+                <li><a href="https://github.com/shintuzd" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+            <p class="footer__copy">© <span data-year>2026</span> Mohammed Azad</p>
+        </div>
+    </footer>
+    <script src="js/site.js"></script>
+</body>
 </html>

@@ -1,77 +1,107 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title> Mohammed Azad</title>
-        <meta charset="utf-8" />
-        <link rel="shortcut icon" href="#">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles/style.css">
+<html lang="en">
 
-        <!-- Leaflet's css-->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me | Mohammed Azad</title>
+    <meta name="description" content="About Mohammed Azad: public-centered data work in Los Angeles, UCLA Luskin, growing up in Koreatown's Little Bangladesh, plus maps of every restaurant and place he's been.">
+    <link rel="canonical" href="https://shintuzd.com/about.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="About Me | Mohammed Azad">
+    <meta property="og:description" content="Public-centered data work in Los Angeles, plus maps of every restaurant and place I've been.">
+    <meta property="og:url" content="https://shintuzd.com/about.html">
+    <meta property="og:image" content="https://shintuzd.com/images/web/og-image.jpg">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
-        <!-- Leaflet's JavaScript-->
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-        <script src='https://unpkg.com/leaflet-arc/bin/leaflet-arc.min.js'></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-    </head>
+    <!-- Leaflet + marker clustering -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
 
-    <body>
-        <header class="header">
-            <div id="plaque">
-                <a href="index.html" id="name">Mohammed Azad</a>
-                <h2 id="subtitle">Data Analyst</h2>
-            </div>
-            <nav id="navigation">
-                <a href="about.html">About Me</a>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="header">
+        <div class="header__inner">
+            <a href="index.html" class="brand">
+                <span class="brand__name">Mohammed Azad</span>
+                <span class="brand__title">Data Analyst</span>
+            </a>
+            <nav class="nav" aria-label="Main">
+                <a href="about.html" aria-current="page">About Me</a>
                 <a href="experience.html">Experience</a>
                 <a href="projects.html">Projects</a>
             </nav>
-        </header>
+        </div>
+    </header>
 
-        <div class="main_content">
-            <div id="contents">
-                <div id="front">
-                <div id="hero">
-                    <h1> About Me</h1>
-                </div>
-                <div id="aboutcontainer"> 
-                    <div id="aboutphotobio">
-                        <img id="about_pfp" src="images/IMG_0572.jpg" alt="Mohammed Azad Headshot">
-                         <p id="about_bio"> 
-                            <span> Community and Public Centered Work</span> 
-                            As mentioned, I’m currently a Data Analyst with the City of Los Angeles. 
-                            My career began as an intern working for former Mayor Eric Garcetti’s office, where I helped the Central Area Representative receive and respond to community concerns. 
-                            Later, I joined former City Controller Ron Galperin’s office primarily to analyze how the City’s fines and fees are impacting Angelenos, and make that information available to the public. 
-                            After briefly continuing this work under City Controller Kenneth Mejia, I supported the Civil + Human Rights and Equity Department’s efforts to mitigate various Citywide inequities and historical injustices. 
-                            Today, I transform data into actionable insights that guide strategy, improve policy, program and service delivery, and drive measurable impact in addressing homelessness and housing needs in Los Angeles. 
-                            While I’m focused on improving the intersection between technology and public affairs, I’ve ensured that the underlying theme in my work goes back to improving the quality of life for people in Los Angeles one way or another.
-                        </p>
-                    </div>
+    <main id="main" class="main_content">
+        <div class="page-title">
+            <h1>About Me</h1>
+        </div>
 
-                <p id="afterfirstpg">  A large part of my work originates while studying at UCLA’s Luskin School of Public Affairs. While I knew that I wanted to do public-centered work in my undergrad, it was here that I was able to dive into the intersection between data science and social science research. I saw the power behind different data tools to uncover trends, correlations, and patterns among social issues. There was power in pairing this data analysis with communities’ visions or other research to promote effective policies and programs. It slowly shaped my goal to use these technical and research skills to develop effective policies and innovate public service delivery. To this day, I use what I’ve learned at UCLA to see how we can adapt new emerging technologies to address the social issues that exist today.  <br /> 
-                    <br /> 
-                    Growing up as a Bengali in Koreatown’s Little Bangladesh has played a significant role towards the work that I do. I’ve witnessed the effects of issues like unaffordable housing, lack of quality green spaces, and wealth inequality first hand by living here, and it’s why I’m determined to address these issues at a larger scale. That’s not to say Koreatown or Los Angeles is riddled with all these problems. Growing up here has also shown me the beauty of LA. Even with the issues that exist, the culture, people, and diversity that come with this city is worth maintaining and preserving, and serves as a significant reminder throughout my career. (Fun fact: I personally struggle to hold myself back from trying all the different restaurants in LA to avoid financial destitution.)
-                  </p>
-                </div>
-                <h3 class="heading"> Every Restaurant I've Ever Eaten At 🥘</h3>
-                <div id="the_map2"></div>
-                <p id="afterfirstpg">In my free time, I enjoy making content such as vlogs, food and movie reviews (and sometimes some analyses of social issues). There’s something about keeping a record of the things I did and enjoyed - it feels like etching something into history. I also like to work out through strength training, basketball, hiking and running (3x LA Marathon finisher!). My biggest aspiration is to travel around the world and experience all types of new food, environments, and learn about different cultures. </p>
-                <div id="travel_portion">
-                    <h3 class="heading"> Places I've Visited Around The World (And Want to Go To) 🌎</h3>
-                    <div id="the_map"></div>
-                    
-                </div>
+        <section class="about-lead">
+            <div>
+                <p class="about-lead__eyebrow">Community and Public Centered Work</p>
+                <p>
+                    As mentioned, I’m currently a Data Analyst with the City of Los Angeles.
+                    My career began as an intern working for former Mayor Eric Garcetti’s office, where I helped the Central Area Representative receive and respond to community concerns.
+                    Later, I joined former City Controller Ron Galperin’s office primarily to analyze how the City’s fines and fees are impacting Angelenos, and make that information available to the public.
+                    After briefly continuing this work under City Controller Kenneth Mejia, I supported the Civil + Human Rights and Equity Department’s efforts to mitigate various Citywide inequities and historical injustices.
+                    Today, I transform data into actionable insights that guide strategy, improve policy, program and service delivery, and drive measurable impact in addressing homelessness and housing needs in Los Angeles.
+                    While I’m focused on improving the intersection between technology and public affairs, I’ve ensured that the underlying theme in my work goes back to improving the quality of life for people in Los Angeles one way or another.
+                </p>
             </div>
+            <img class="about-lead__photo" src="images/web/about.webp" width="800" height="1201" alt="Photo of Mohammed Azad">
+        </section>
+
+        <div class="prose">
+            <p>
+                A large part of my work originates while studying at UCLA’s Luskin School of Public Affairs. While I knew that I wanted to do public-centered work in my undergrad, it was here that I was able to dive into the intersection between data science and social science research. I saw the power behind different data tools to uncover trends, correlations, and patterns among social issues. There was power in pairing this data analysis with communities’ visions or other research to promote effective policies and programs. It slowly shaped my goal to use these technical and research skills to develop effective policies and innovate public service delivery. To this day, I use what I’ve learned at UCLA to see how we can adapt new emerging technologies to address the social issues that exist today.
+            </p>
+            <p>
+                Growing up as a Bengali in Koreatown’s Little Bangladesh has played a significant role towards the work that I do. I’ve witnessed the effects of issues like unaffordable housing, lack of quality green spaces, and wealth inequality first hand by living here, and it’s why I’m determined to address these issues at a larger scale. That’s not to say Koreatown or Los Angeles is riddled with all these problems. Growing up here has also shown me the beauty of LA. Even with the issues that exist, the culture, people, and diversity that come with this city is worth maintaining and preserving, and serves as a significant reminder throughout my career. (Fun fact: I personally struggle to hold myself back from trying all the different restaurants in LA to avoid financial destitution.)
+            </p>
         </div>
+
+        <h2 class="section-heading">Every Restaurant I've Ever Eaten At 🥘</h2>
+        <div id="foodmap" class="map" data-map="food" data-embedded role="region" aria-label="Map of restaurants I've eaten at"></div>
+        <p class="map-status" data-status-for="foodmap">Loading restaurants…</p>
+
+        <div class="prose">
+            <p>
+                In my free time, I enjoy making content such as vlogs, food and movie reviews (and sometimes some analyses of social issues). There’s something about keeping a record of the things I did and enjoyed - it feels like etching something into history. I also like to work out through strength training, basketball, hiking and running (3x LA Marathon finisher!). My biggest aspiration is to travel around the world and experience all types of new food, environments, and learn about different cultures.
+            </p>
         </div>
-        <footer class="footer"> 
-            <hr class="solid">
-            <p style="line-height: 25px;">Get in Touch! <br>
-            E-Mail: shintuzd@gmail.com</p>
-            <p style="text-align: right"> © 2026 Mohammed Azad</p>
-        </footer>    
-        <script src="js/init.js"></script>
-    </body>
+
+        <h2 class="section-heading">Places I've Visited Around The World (And Want to Go To) 🌎</h2>
+        <div id="travelmap" class="map" data-map="travel" data-embedded role="region" aria-label="Map of places I've visited and want to visit"></div>
+        <p class="map-status" data-status-for="travelmap">Loading places…</p>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__cta">Get in touch!</p>
+            <ul class="footer__links">
+                <li><a href="mailto:shintuzd@gmail.com">shintuzd@gmail.com</a></li>
+                <li><a href="https://github.com/shintuzd" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+            <p class="footer__copy">© <span data-year>2026</span> Mohammed Azad</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet-arc@1.0.2/bin/leaflet-arc.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="js/site.js"></script>
+    <script src="js/maps.js"></script>
+</body>
 </html>

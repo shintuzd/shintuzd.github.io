@@ -2,59 +2,73 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Mohammed Azad</title>
-    <link rel="shortcut icon" href="#">
+    <title>Mohammed Azad | Data Analyst</title>
+    <meta name="description" content="Mohammed Azad is a Data Analyst with the City of Los Angeles, working at the intersection of technology and public affairs.">
+    <link rel="canonical" href="https://shintuzd.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mohammed Azad | Data Analyst">
+    <meta property="og:description" content="Data Analyst with the City of Los Angeles, working at the intersection of technology and public affairs.">
+    <meta property="og:url" content="https://shintuzd.com/">
+    <meta property="og:image" content="https://shintuzd.com/images/web/og-image.jpg">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/style.css">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-        
-    <!-- Leaflet's css-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
-    <!-- Leaflet's JavaScript-->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </head>
 
-<body class="home">
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="header">
-        <div id="plaque">
-            <a href="index.html" id="name">Mohammed Azad</a>
-            <h2 id="subtitle">Data Analyst</h2>
+        <div class="header__inner">
+            <a href="index.html" class="brand">
+                <span class="brand__name">Mohammed Azad</span>
+                <span class="brand__title">Data Analyst</span>
+            </a>
+            <nav class="nav" aria-label="Main">
+                <a href="about.html">About Me</a>
+                <a href="experience.html">Experience</a>
+                <a href="projects.html">Projects</a>
+            </nav>
         </div>
-        <nav id="navigation">
-            <a href="about.html">About Me</a>
-            <a href="experience.html">Experience</a>
-            <a href="projects.html">Projects</a>
-        </nav>
     </header>
 
-    <main class="main_content">
-        <section id="front">
-            <div id="hero">
-                <h1> Mohammed Azad</h1>
-            </div>
-
-            <div id="photobio">
-                <img id="pfp" src="images/IMG_7677.jpg" alt="Mohammed Azad Headshot">
-                <p id="landing_bio"> 
-                    Hello! My name is Mohammed Azad and I'm a Data Analyst with the City of Los Angeles. My current career goal is to 
-                    improve the intersection between technology and public affairs to better deliver public services and promote transparency. 
-                    My key interests include improving public policy through data analysis, data-driven technology, and programmatic efficiency across a wide range of social issues, especially the ones affecting Los Angeles. 
-                    In my free time, I enjoy working out 🏋🏾‍♂️, creating content 🎥, and going on all types of adventures 🌎.                        
+    <main id="main" class="main_content">
+        <section class="intro">
+            <img class="intro__photo" src="images/web/headshot.webp" width="600" height="900"
+                alt="Portrait of Mohammed Azad">
+            <div>
+                <p class="intro__eyebrow">Data Analyst · City of Los Angeles</p>
+                <h1 class="intro__heading">Mohammed Azad</h1>
+                <p class="intro__bio">
+                    Hello! My name is Mohammed Azad and I'm a Data Analyst with the City of Los Angeles. My current career goal is to
+                    improve the intersection between technology and public affairs to better deliver public services and promote transparency.
+                    My key interests include improving public policy through data analysis, data-driven technology, and programmatic efficiency across a wide range of social issues, especially the ones affecting Los Angeles.
+                    In my free time, I enjoy working out 🏋🏾‍♂️, creating content 🎥, and going on all types of adventures 🌎.
                 </p>
+                <div class="intro__actions">
+                    <a class="button button--solid" href="projects.html">View my projects</a>
+                    <a class="button" href="experience.html">Experience</a>
+                    <a class="button" href="mailto:shintuzd@gmail.com">Get in touch</a>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer class="footer"> 
-        <hr class="solid">
-        <p style="line-height: 25px;">Get in Touch! <br>
-        E-Mail: shintuzd@gmail.com</p>
-        <p style="text-align: right"> © 2026 Mohammed Azad</p>
-    </footer> 
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__cta">Get in touch!</p>
+            <ul class="footer__links">
+                <li><a href="mailto:shintuzd@gmail.com">shintuzd@gmail.com</a></li>
+                <li><a href="https://github.com/shintuzd" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+            <p class="footer__copy">© <span data-year>2026</span> Mohammed Azad</p>
+        </div>
+    </footer>
+    <script src="js/site.js"></script>
 </body>
 </html>
