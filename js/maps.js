@@ -1,6 +1,7 @@
 // Shared Leaflet maps for the About page and the full-page maps in /docs.
 // Any element with data-map="food" or data-map="travel" is initialized automatically.
-// Add data-embedded to a map that sits inside a page of text, so the mouse wheel scrolls the page instead of zooming.
+// Add data-embedded to a map that sits inside a page of text, so the mouse wheel scrolls the page instead of zooming
+// (trackpad pinch still zooms the map).
 
 // Places I've Eaten
 const FOOD_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8PYlhZJ6W-p4IJV4rDACwrBENCbrMBQaH2SVtGDnWW24vwfEgXv50UET6sJxgDl39Ox-GJmiukfj3/pub?output=csv";
@@ -42,12 +43,27 @@ function baseMap(el, view, zoom, minZoom) {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Embedded maps: let the user opt in to wheel zoom by clicking the map
+    // Embedded maps: trackpad pinch zooms the map (instead of the page) right away,
+    // and clicking the map opts in to plain mouse-wheel zoom too
     if (el.hasAttribute("data-embedded")) {
-        map.once("click", () => map.scrollWheelZoom.enable());
+        map.addHandler("pinchZoom", PinchWheelZoom);
+        map.pinchZoom.enable();
+        map.once("click", () => {
+            map.pinchZoom.disable();
+            map.scrollWheelZoom.enable();
+        });
     }
     return map;
 }
+
+// Trackpad pinches arrive as wheel events with ctrlKey set. Zoom the map on those only,
+// and let ordinary wheel/two-finger scrolling fall through to the page.
+const PinchWheelZoom = L.Map.ScrollWheelZoom.extend({
+    _onWheelScroll(e) {
+        if (!e.ctrlKey) return;
+        L.Map.ScrollWheelZoom.prototype._onWheelScroll.call(this, e);
+    }
+});
 
 function loadCsv(url) {
     return new Promise((resolve, reject) => {
