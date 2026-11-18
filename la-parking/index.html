@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LA Parking Meters Live | Mohammed Azad</title>
+<meta name="description" content="See which City of Los Angeles metered parking spaces are open right now, from LADOT's live meter sensor data.">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+<style>
+  /* app-specific styles; tokens (--text, --muted, --border, --accent, --radius, --font) come from the site stylesheet */
+  :root { --panel:#fff; --open:#16a34a; --occ:#dc2626; --unk:#f59e0b; --none:#5f6b7a; }
+  html, body { height:100%; }
+  body { height:100vh; min-height:0; overflow:hidden; }
+  .app { flex:1; min-height:0; display:flex; }
+  aside { width:350px; flex:none; background:var(--panel); border-right:1px solid var(--border); overflow-y:auto; padding:1.25rem; font-size:14px; line-height:1.45; }
+  main { flex:1; min-width:0; position:relative; }
+  #map { position:absolute; inset:0; font-family:var(--font); }
+
+  aside h1 { font-size:1.6rem; font-weight:700; letter-spacing:-0.02em; line-height:1.15; margin:0 0 .35rem; color:var(--text-strong); }
+  .sub { color:var(--muted); font-size:13px; margin:0 0 .5rem; }
+  aside h2 { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--subtle); margin:1.5rem 0 .6rem; }
+  :focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .live { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:14px; }
+  .big { display:flex; align-items:baseline; gap:8px; }
+  .big b { font-size:2.4rem; font-weight:700; letter-spacing:-0.03em; line-height:1; color:var(--open); font-variant-numeric:tabular-nums; }
+  .big span { font-size:13px; color:var(--muted); line-height:1.3; }
+  .bar { display:flex; height:8px; border-radius:4px; overflow:hidden; margin:12px 0 6px; background:var(--border); }
+  .bar i { display:block; height:100%; }
+  .bar i + i { border-left:2px solid #fff; }
+  #barNote { font-size:12.5px; color:var(--muted); margin:0; }
+  .status { display:flex; align-items:center; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
+  #updated { flex:1; font-size:12.5px; color:var(--muted); line-height:1.35; }
+  #updated.err { color:var(--occ); }
+  button.btn { font:inherit; font-size:.82rem; font-weight:600; padding:.4rem .95rem; border:1px solid var(--accent); border-radius:50px; background:var(--accent); color:#fff; cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
+  button.btn:hover { filter:brightness(1.08); }
+  button.btn:disabled { opacity:.6; cursor:progress; }
+  button.btn.ghost { background:#fff; color:var(--accent); }
+  .spin { width:12px; height:12px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; display:none; animation:r .7s linear infinite; }
+  button:disabled .spin { display:inline-block; }
+  @keyframes r { to { transform:rotate(360deg); } }
+
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  button.chip { font:inherit; font-size:.82rem; font-weight:600; padding:.3rem .8rem .3rem .6rem; border:1px solid var(--border); border-radius:50px; background:#fff; color:#5d6b7a; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all .15s ease; }
+  button.chip::before { content:""; width:10px; height:10px; border-radius:50%; background:var(--c); border:1.5px solid #fff; box-shadow:0 0 0 1px var(--c); }
+  button.chip:hover { border-color:var(--c); color:var(--text-strong); }
+  button.chip[aria-pressed="true"] { background:color-mix(in srgb, var(--c) 12%, #fff); border-color:var(--c); color:var(--text-strong); }
+  button.chip[aria-pressed="false"]::before { background:#fff; }
+  button.chip small { font-weight:400; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .note { font-size:12px; color:var(--muted); margin:.6rem 0 0; line-height:1.4; }
+
+  .searchrow { display:flex; gap:6px; }
+  input[type=search] { font:inherit; font-size:14px; flex:1; min-width:0; padding:.5rem .9rem; border:1px solid var(--border); border-radius:50px; background:#fff; color:var(--text); }
+  input[type=search]:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  #searchMsg:empty { display:none; }
+
+  .foot { font-size:12px; color:var(--muted); margin:1.5rem 0 0; }
+  .foot a { color:var(--accent); }
+  .credit { border-top:1px solid var(--border); padding-top:1rem; margin-top:1rem; }
+
+  .leaflet-popup-content { font:13px/1.45 var(--font); margin:12px 14px; min-width:210px; }
+  .pop h3 { font-size:14px; font-weight:700; margin:0 0 6px; color:var(--text-strong); }
+  .pill { display:inline-block; font-size:11.5px; font-weight:700; padding:1px 8px; border-radius:50px; color:#fff; background:var(--c); }
+  .pop .when { color:var(--muted); font-size:12px; margin-left:4px; }
+  .pop table { width:100%; border-collapse:collapse; margin:8px 0 0; }
+  .pop td { padding:1px 0; vertical-align:top; } .pop td:first-child { color:var(--muted); padding-right:10px; white-space:nowrap; }
+  .pop .stale { margin:6px 0 0; padding:5px 8px; border-radius:6px; background:#fef3c7; color:#78350f; font-size:12px; }
+  .pop .blk { margin:8px 0 0; padding-top:8px; border-top:1px solid var(--border); font-size:12.5px; }
+  .loading { position:absolute; inset:0; display:grid; place-items:center; z-index:1000; background:rgba(255,255,255,.6); font-size:14px; color:var(--muted); }
+  .loading[hidden] { display:none; }
+  .zoomhint { position:absolute; left:50%; bottom:22px; transform:translateX(-50%); z-index:900; background:#fff; border:1px solid var(--card-border); border-radius:50px; padding:5px 14px; font-size:12.5px; color:var(--text); box-shadow:0 2px 8px rgba(17,17,17,.12); pointer-events:none; white-space:nowrap; }
+  .zoomhint[hidden] { display:none; }
+
+  @media (max-width:760px) {
+    .app { flex-direction:column-reverse; }
+    aside { width:100%; height:48%; border-right:0; border-top:1px solid var(--border); }
+    main { height:52%; flex:none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <h1>LA Parking Meters Live</h1>
+  <p class="sub">Which metered spaces in the City of Los Angeles are open right now, from LADOT's in-ground meter sensors.</p>
+
+  <h2>Right now</h2>
+  <div class="live">
+    <div class="big"><b id="pct">–</b><span>of sensor spaces<br>are open</span></div>
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <p id="barNote">Loading live sensor data…</p>
+    <div class="status">
+      <div id="updated" aria-live="polite"></div>
+      <button class="btn" id="refresh" disabled><span class="spin"></span><span>Refresh</span></button>
+    </div>
+  </div>
+
+  <h2>Show on map</h2>
+  <div class="chips" id="chips"></div>
+  <p class="note">Sensors cover about 1 in 10 meters, mostly in Downtown and Hollywood, plus around USC, San Pedro, Venice and Westwood. Meters without a sensor appear in gray when you zoom in.</p>
+
+  <h2>Find a street</h2>
+  <div class="searchrow">
+    <input id="search" type="search" list="blocks" placeholder="Street, e.g. Broadway" autocomplete="off">
+    <button class="btn ghost" id="locate" title="Zoom to my location">Near me</button>
+  </div>
+  <datalist id="blocks"></datalist>
+  <p class="note" id="searchMsg"></p>
+
+  <p class="foot">Data: <a href="https://data.lacity.org/Transportation/LADOT-Parking-Meter-Occupancy/e7h6-4a3e" target="_blank" rel="noopener">LADOT Parking Meter Occupancy</a> (live, fetched each time you load or refresh) ·
+  <a href="https://data.lacity.org/Transportation/LADOT-Metered-Parking-Inventory-Policies/s49e-q6j2" target="_blank" rel="noopener">LADOT Metered Parking Inventory &amp; Policies</a> (<span id="built">–</span>).
+  “Open” means the sensor last reported the space as vacant. Always check posted signs for rush-hour, street-cleaning and other restrictions.<span id="unmapped"></span></p>
+  <p class="foot credit">Developed by Mohammed Azad (<a href="https://shintuzd.com">shintuzd.com</a>)</p>
+</aside>
+
+<main>
+  <div id="map"></div>
+  <div class="loading" id="loading">Loading meters…</div>
+  <div class="zoomhint" id="zoomhint" hidden>Zoom in to see meters without sensors</div>
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+const OCC_URL = 'https://data.lacity.org/resource/e7h6-4a3e.json?$select=spaceid,eventtime,occupancystate&$limit=50000';
+const GRAY_ZOOM = 15;        // meters without sensors only render at this zoom and closer
+const STALE_MS = 3 * 864e5;  // no change in 3+ days usually means a stuck sensor (overnight parking is ~6-24 hr)
+const STATES = {
+  VACANT:   {label: 'Open',      color: '#16a34a'},
+  OCCUPIED: {label: 'Occupied',  color: '#dc2626'},
+  UNKNOWN:  {label: 'Unknown',   color: '#f59e0b'},
+  NONE:     {label: 'No sensor', color: '#5f6b7a'},
+};
+const SENSOR_STATES = ['VACANT', 'OCCUPIED', 'UNKNOWN'];
+const fmt = n => n.toLocaleString('en-US');
+const laTime = new Intl.DateTimeFormat('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles'});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+function ago(t) {
+  const s = Math.max(0, (Date.now() - t) / 1000);
+  if (s < 60) return 'just now';
+  const m = s / 60; if (m < 60) return Math.round(m) + ' min ago';
+  const h = m / 60; if (h < 24) return Math.round(h) + ' hr ago';
+  const d = Math.round(h / 24); return d + (d === 1 ? ' day ago' : ' days ago');
+}
+const titleCase = s => s.toLowerCase().replace(/\b([a-z])/g, c => c.toUpperCase()).replace(/\b(\d+)(St|Nd|Rd|Th)\b/g, (_, n, x) => n + x.toLowerCase());
+
+// ---------- state ----------
+let INV, LK;                          // inventory rows + lookup tables
+const markers = [];                   // one per inventory row (created lazily per state)
+const stateOf = [];                   // current state key per inventory row
+const blocks = new Map();             // blockface index -> [row indices]
+let occ = new Map();                  // spaceid -> {s: state, t: ms}
+let counts = {VACANT: 0, OCCUPIED: 0, UNKNOWN: 0, NONE: 0};
+let fetchedAt = null, newest = null, loading = false, openIdx = null;
+const shown = {VACANT: true, OCCUPIED: true, UNKNOWN: true, NONE: true};
+
+// ---------- map ----------
+const map = L.map('map', {preferCanvas: true}).setView([34.043, -118.254], 14);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 19
+}).addTo(map);
+map.createPane('grays').style.zIndex = 395;     // under the sensor dots (overlayPane = 400)
+const grayRenderer = L.canvas({pane: 'grays', padding: 0.3});
+const liveRenderer = L.canvas({padding: 0.3});
+const groups = {};
+for (const k in STATES) {
+  groups[k] = L.featureGroup().addTo(map);
+  groups[k].on('click', e => openInfo(e.layer._i));
+}
+
+function radius(st) {
+  const z = map.getZoom();
+  // meters sit ~6 m apart, so keep dots small enough that neighbors don't hide each other
+  if (st === 'NONE') return z >= 18 ? 4.5 : z >= 17 ? 3.5 : 2.5;
+  return z >= 18 ? 6.5 : z >= 17 ? 5 : z >= 15 ? 4 : z >= 13 ? 3.5 : 3;
+}
+function makeMarker(i, st) {
+  const r = INV[i], none = st === 'NONE';
+  const m = L.circleMarker([r[1], r[2]], {
+    renderer: none ? grayRenderer : liveRenderer, radius: radius(st),
+    color: '#fff', weight: none ? 0.8 : 1, fillColor: STATES[st].color, fillOpacity: none ? 0.75 : 0.95,
+  });
+  m._i = i; m._none = none;
+  return m;
+}
+
+// Put every inventory row in the group for its current state. Only rows whose state changed are touched.
+function applyStates(first) {
+  counts = {VACANT: 0, OCCUPIED: 0, UNKNOWN: 0, NONE: 0};
+  for (let i = 0; i < INV.length; i++) {
+    const o = occ.get(INV[i][0]), st = o ? o.s : 'NONE';
+    counts[st]++;
+    if (!first && stateOf[i] === st) continue;
+    const old = stateOf[i], m = markers[i];
+    if (m) groups[old].removeLayer(m);
+    if (!m || m._none !== (st === 'NONE')) markers[i] = makeMarker(i, st);
+    else m.setStyle({fillColor: STATES[st].color}).setRadius(radius(st));
+    stateOf[i] = st;
+    if (st !== 'NONE') groups[st].addLayer(markers[i]);
+  }
+  for (const k of SENSOR_STATES) setGroupVisible(k);
+  syncGrays();
+}
+function setGroupVisible(k) {
+  if (shown[k] && !map.hasLayer(groups[k])) groups[k].addTo(map);
+  if (!shown[k] && map.hasLayer(groups[k])) map.removeLayer(groups[k]);
+}
+// Gray (no-sensor) meters: ~31k of them, so only the ones near the current view are on the map.
+function syncGrays() {
+  const on = shown.NONE && map.getZoom() >= GRAY_ZOOM;
+  document.getElementById('zoomhint').hidden = !shown.NONE || on || !INV;
+  if (!on) { groups.NONE.clearLayers(); return; }
+  const b = map.getBounds().pad(0.4), g = groups.NONE;
+  for (let i = 0; i < INV.length; i++) {
+    if (stateOf[i] !== 'NONE') continue;
+    const m = markers[i], want = b.contains(m.getLatLng()), has = g.hasLayer(m);
+    if (want && !has) g.addLayer(m); else if (!want && has) g.removeLayer(m);
+  }
+}
+map.on('zoomend', () => {
+  if (!INV) return;
+  for (const k of SENSOR_STATES) groups[k].eachLayer(m => m.setRadius(radius(k)));
+  groups.NONE.eachLayer(m => m.setRadius(radius('NONE')));
+});
+map.on('moveend', () => INV && syncGrays());
+
+// ---------- popup ----------
+function openInfo(i) {
+  openIdx = i;
+  const r = INV[i];
+  L.popup({autoPanPadding: [30, 30]}).setLatLng([r[1], r[2]]).setContent(infoHTML(i)).openOn(map);
+}
+map.on('popupclose', () => openIdx = null);
+function infoHTML(i) {
+  const r = INV[i], st = stateOf[i], o = occ.get(r[0]);
+  const when = o ? `<span class="when">changed ${ago(o.t)}</span>` : '';
+  const stale = o && Date.now() - o.t > STALE_MS
+    ? `<div class="stale">This sensor hasn't reported a change in ${ago(o.t).replace(' ago', '')}, so it may be out of date.</div>` : '';
+  const ids = blocks.get(r[3]), sensed = ids.filter(j => stateOf[j] !== 'NONE'), open = sensed.filter(j => stateOf[j] === 'VACANT').length;
+  const blk = sensed.length
+    ? `<b>${open} of ${sensed.length}</b> sensor space${sensed.length === 1 ? '' : 's'} open on this block` + (ids.length > sensed.length ? ` <span style="color:var(--muted)">(${ids.length} meters total)</span>` : '')
+    : `No sensors on this block (${ids.length} meter${ids.length === 1 ? '' : 's'})`;
+  return `<div class="pop"><h3>${esc(titleCase(LK.blockface[r[3]]))}</h3>
+    <span class="pill" style="--c:${STATES[st].color}">${STATES[st].label}</span>${when}${stale}
+    <table>
+      <tr><td>Rate</td><td>${esc(LK.rate[r[4]] || '–')}</td></tr>
+      <tr><td>Time limit</td><td>${esc(LK.limit[r[5]] || '–')}</td></tr>
+      <tr><td>Meter</td><td>${esc(LK.type[r[6]] || '–')} · ${esc(r[0])}</td></tr>
+    </table>
+    <div class="blk">${blk}</div></div>`;
+}
+
+// ---------- sidebar ----------
+const chipsEl = document.getElementById('chips');
+for (const k in STATES) {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.dataset.k = k; b.style.setProperty('--c', STATES[k].color);
+  b.setAttribute('aria-pressed', 'true');
+  b.innerHTML = `${STATES[k].label} <small></small>`;
+  b.onclick = () => {
+    shown[k] = !shown[k]; b.setAttribute('aria-pressed', shown[k]);
+    if (k === 'NONE') syncGrays(); else setGroupVisible(k);
+  };
+  chipsEl.appendChild(b);
+}
+function renderSidebar() {
+  // sensor totals include the few sensor spaces with no inventory location
+  const c = {VACANT: 0, OCCUPIED: 0, UNKNOWN: 0};
+  for (const o of occ.values()) c[o.s]++;
+  const known = c.VACANT + c.OCCUPIED, total = known + c.UNKNOWN;
+  document.getElementById('pct').textContent = known ? Math.round(100 * c.VACANT / known) + '%' : '–';
+  document.getElementById('bar').innerHTML = total
+    ? SENSOR_STATES.map(k => `<i style="width:${100 * c[k] / total}%;background:${STATES[k].color}"></i>`).join('') : '';
+  document.getElementById('barNote').textContent = total
+    ? `${fmt(c.VACANT)} open · ${fmt(c.OCCUPIED)} occupied · ${fmt(c.UNKNOWN)} unknown, out of ${fmt(total)} spaces with sensors`
+    : 'No live sensor data loaded.';
+  chipsEl.querySelectorAll('.chip').forEach(b => {
+    const k = b.dataset.k; b.querySelector('small').textContent = fmt(k === 'NONE' ? counts.NONE : c[k]);
+  });
+  const unmapped = [...occ.keys()].filter(id => !idIndex.has(id)).length;
+  document.getElementById('unmapped').textContent = unmapped
+    ? ` ${fmt(unmapped)} sensor spaces have no location in the inventory, so they count toward the totals but aren't on the map.` : '';
+  tick();
+}
+function tick() {
+  const el = document.getElementById('updated');
+  if (el.classList.contains('err') || !fetchedAt) return;
+  el.innerHTML = `Updated ${ago(fetchedAt)}` + (newest ? `<br>Latest sensor reading ${laTime.format(newest)}` : '');
+}
+setInterval(tick, 30000);
+
+// ---------- data ----------
+let idIndex = new Map();
+async function loadOccupancy() {
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 25000);
+  try {
+    const res = await fetch(OCC_URL, {cache: 'no-store', signal: ctl.signal});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const rows = await res.json(), next = new Map();
+    let latest = 0;
+    for (const r of rows) {
+      const s = SENSOR_STATES.includes(r.occupancystate) ? r.occupancystate : 'UNKNOWN';
+      const t = Date.parse(r.eventtime + 'Z');          // Socrata floating timestamp, stored in UTC
+      next.set(r.spaceid, {s, t});
+      if (t > latest) latest = t;
+    }
+    return {next, latest};
+  } finally { clearTimeout(timer); }
+}
+
+async function refresh(first) {
+  if (loading) return;
+  loading = true;
+  const btn = document.getElementById('refresh'), upd = document.getElementById('updated');
+  btn.disabled = true; btn.lastChild.textContent = 'Refreshing';
+  try {
+    const {next, latest} = await loadOccupancy();
+    occ = next; newest = latest || null; fetchedAt = Date.now();
+    upd.classList.remove('err');
+    applyStates(first);
+    renderSidebar();
+    if (openIdx !== null) openInfo(openIdx);
+  } catch (e) {
+    upd.classList.add('err');
+    upd.textContent = (fetchedAt ? 'Couldn’t refresh, showing data from ' + ago(fetchedAt) : 'Couldn’t load live sensor data') + '. Try again.';
+    if (first) { applyStates(true); renderSidebar(); }
+    console.error(e);
+  } finally {
+    loading = false; btn.disabled = false; btn.lastChild.textContent = 'Refresh';
+  }
+}
+document.getElementById('refresh').onclick = () => refresh(false);
+
+fetch('data/inventory.json').then(r => r.json()).then(async d => {
+  INV = d.rows; LK = d.lookups;
+  document.getElementById('built').textContent = 'as of ' + new Date(d.built + 'T12:00:00').toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+  INV.forEach((r, i) => {
+    idIndex.set(r[0], i);
+    if (!blocks.has(r[3])) blocks.set(r[3], []);
+    blocks.get(r[3]).push(i);
+  });
+  document.getElementById('blocks').innerHTML = [...blocks.keys()].map(k => LK.blockface[k]).sort()
+    .map(n => `<option value="${esc(titleCase(n))}">`).join('');
+  await refresh(true);
+  document.getElementById('loading').hidden = true;
+}).catch(e => {
+  document.getElementById('loading').textContent = 'Couldn’t load the meter inventory.';
+  console.error(e);
+});
+
+// ---------- search + locate ----------
+document.getElementById('search').addEventListener('change', e => {
+  const q = e.target.value.trim().toUpperCase().replace(/\s+/g, ' '), msg = document.getElementById('searchMsg');
+  msg.textContent = '';
+  if (!q) return;
+  if (!INV) { msg.textContent = 'Still loading meters…'; return; }
+  const exact = LK.blockface.indexOf(q);
+  const hits = exact >= 0 && blocks.has(exact) ? [exact] : [...blocks.keys()].filter(k => LK.blockface[k].includes(q));
+  if (!hits.length) { msg.textContent = `No metered blocks match “${e.target.value.trim()}”.`; return; }
+  const idx = hits.flatMap(k => blocks.get(k));
+  map.fitBounds(L.latLngBounds(idx.map(i => [INV[i][1], INV[i][2]])), {maxZoom: hits.length === 1 ? 18 : 17, padding: [30, 30], animate: false});
+  if (hits.length === 1) {
+    const fresh = i => Date.now() - occ.get(INV[i][0]).t <= STALE_MS;
+    const pick = idx.find(i => stateOf[i] === 'VACANT' && fresh(i)) ?? idx.find(i => stateOf[i] === 'VACANT')
+      ?? idx.find(i => stateOf[i] !== 'NONE') ?? idx[0];
+    openInfo(pick);
+  } else {
+    const sensed = idx.filter(i => stateOf[i] !== 'NONE'), open = sensed.filter(i => stateOf[i] === 'VACANT').length;
+    msg.textContent = `${fmt(hits.length)} metered blocks match` + (sensed.length ? `, with ${fmt(open)} of ${fmt(sensed.length)} sensor spaces open.` : ', none with sensors.');
+  }
+});
+
+let me;
+document.getElementById('locate').onclick = () => {
+  document.getElementById('searchMsg').textContent = 'Finding your location…';
+  map.locate({setView: true, maxZoom: 17});
+};
+map.on('locationfound', e => {
+  document.getElementById('searchMsg').textContent = '';
+  if (me) me.remove();
+  me = L.circleMarker(e.latlng, {radius: 8, color: '#fff', weight: 3, fillColor: '#0077ff', fillOpacity: 1, interactive: false}).addTo(map);
+});
+map.on('locationerror', () => document.getElementById('searchMsg').textContent = 'Couldn’t get your location. Check your browser’s location permission.');
+</script>
+</body>
+</html>
