@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LA City Workforce &amp; Pay | Mohammed Azad</title>
+<meta name="description" content="Who works for the City of Los Angeles and what they are paid, 2018–2025: full-time workforce by gender and race/ethnicity, pay gaps overall and within the same job, overtime, and every department, from the LA City Controller's payroll data.">
+<link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/style.css">
+<style>
+  /* dashboard styles; site tokens (--text, --muted, --border, --accent, --radius, --font) come from style.css */
+  :root {
+    --women: #6250d6; --men: #e34948;
+    --e-hisp: #2a78d6; --e-white: #eb6834; --e-black: #1baf7a; --e-api: #eda100; --e-aian: #e87ba4; --e-other: #008300;
+    --p-reg: #184f95; --p-ot: #3987e5; --p-oth: #86b6ef;
+    --ink: #111; --ink2: #52514e; --axis-ink: #6f6e69;
+    --grid: #e9e8e2; --baseline: #c3c2b7;
+    --panel: #fff; --wash: #f6f6f3;
+    --hdr: 88px;
+  }
+  .main_content { max-width: 1180px; padding-top: 0; }
+  .wf-intro { margin: 2rem 0 1.25rem; }
+  .wf-intro h1 { font-size: clamp(1.9rem, 4.5vw, 2.6rem); letter-spacing: -0.02em; line-height: 1.15; margin: 0 0 .4rem; color: var(--text-strong); }
+  .wf-intro .sub { color: var(--muted); margin: 0 0 1rem; }
+  .headline { font-size: 1.08rem; line-height: 1.55; color: var(--text); max-width: 62rem; margin: 0; }
+  .headline b { color: var(--text-strong); }
+
+  .controls { position: sticky; top: var(--hdr); z-index: 900; background: rgba(255,255,255,.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border); margin: 0 -1.5rem 1.5rem; padding: .7rem 1.5rem; display: flex; flex-wrap: wrap; gap: .6rem 1.25rem; align-items: center; }
+  .controls label, .controls .lab { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--subtle); margin-right: .4rem; }
+  .controls select { font: inherit; font-size: .95rem; font-weight: 600; padding: .4rem 2rem .4rem .8rem; border: 1px solid var(--card-border); border-radius: 50px; background: #fff; color: var(--text-strong); cursor: pointer; max-width: 100%; }
+  .seg { display: inline-flex; border: 1px solid var(--card-border); border-radius: 50px; overflow: hidden; background: #fff; flex-wrap: wrap; }
+  .seg button { font: inherit; font-size: .88rem; font-weight: 600; padding: .38rem .75rem; border: 0; background: #fff; color: #5d6b7a; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+  .seg button:hover { color: var(--text-strong); }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .sw.ring { background: #fff; border: 2px solid var(--ink2); border-radius: 50%; width: 11px; height: 11px; }
+  .sw.dot { border-radius: 50%; }
+  .sw.tickmark { width: 3px; height: 14px; border-radius: 1px; background: var(--ink); }
+  .sw.dash { width: 18px; height: 0; border-top: 2px dashed var(--women); border-radius: 0; }
+  .sw.line { width: 18px; height: 2px; border-radius: 1px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section.block { margin: 0 0 2.75rem; }
+  section.block > h2, .bar-head h2 { font-size: 1.3rem; letter-spacing: -0.01em; margin: 0 0 .25rem; color: var(--text-strong); }
+  .lede { color: var(--muted); margin: 0 0 1rem; max-width: 54rem; font-size: .95rem; }
+  .lede b { color: var(--text-strong); font-weight: 600; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; min-width: 0; }
+  .panel h3 { font-size: .98rem; margin: 0 0 .15rem; color: var(--text-strong); }
+  .panel .note { font-size: .8rem; color: var(--muted); margin: .6rem 0 0; line-height: 1.45; }
+  .panel .cap { font-size: .82rem; color: var(--muted); margin: 0 0 .6rem; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .grid2 + .panel, .grid2 + .grid2 { margin-top: 1rem; }
+  .wide { grid-template-columns: 3fr 2fr; }
+
+  .tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .8rem; }
+  .tile { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: .85rem 1rem .9rem; min-width: 0; }
+  .tile .tl { font-size: .82rem; font-weight: 600; color: var(--ink2); }
+  .tile .tv { font-size: 1.85rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); line-height: 1.15; margin: .25rem 0 .15rem; font-variant-numeric: tabular-nums; }
+  .tile .tv small { font-size: .85rem; font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: .3rem; }
+  .tile .td { font-size: .8rem; color: var(--ink2); }
+  .tile .ts { font-size: .78rem; color: var(--muted); margin-top: .15rem; line-height: 1.4; }
+  .tile .split { display: flex; height: 6px; gap: 2px; margin: .5rem 0 .35rem; }
+  .tile .split i { display: block; height: 100%; }
+  .tile .split i:first-child { border-radius: 3px 0 0 3px; } .tile .split i:last-child { border-radius: 0 3px 3px 0; }
+  .tile.empty .tv { color: var(--muted); font-size: 1.05rem; font-weight: 600; margin: .6rem 0; }
+
+  .chart { width: 100%; position: relative; }
+  .chart svg { display: block; overflow: visible; font-family: var(--font); }
+  .chart .grid { stroke: var(--grid); stroke-width: 1; }
+  .chart .axis { stroke: var(--baseline); stroke-width: 1; }
+  .chart .zero { stroke: var(--ink2); stroke-width: 1; }
+  .chart .tick { fill: var(--axis-ink); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .chart .tick.hl { fill: var(--ink); font-weight: 700; }
+  .chart .ttl { fill: var(--axis-ink); font-size: 11.5px; }
+  .chart .vl { fill: var(--ink); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .chart .vl.sm { font-size: 11.5px; fill: var(--ink2); }
+  .chart .rl { fill: var(--ink2); font-size: 12.5px; }
+  .chart .rl.hl { fill: var(--ink); font-weight: 700; }
+  .chart .dl { fill: var(--ink2); font-size: 11.5px; }
+  .chart .dl.b { fill: var(--ink); font-weight: 600; }
+  .chart .halo { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+  .chart .hit { fill: transparent; }
+  .chart .selband { fill: var(--wash); }
+  .chart .ref { stroke: var(--ink); stroke-width: 2; }
+  .chart .refline { stroke: var(--ink2); stroke-width: 1; stroke-dasharray: 4 3; }
+  .chart .link { stroke: #bdbcb5; stroke-width: 2; }
+  .chart .ln { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .chart .xh { stroke: var(--baseline); stroke-width: 1; }
+  .chart .bub { fill: var(--e-hisp); fill-opacity: .28; stroke: var(--e-hisp); stroke-width: 1.25; }
+  .chart .bub.on { fill-opacity: .7; }
+  .chart .bubhit { fill: transparent; cursor: default; }
+
+  .lgd { display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .82rem; color: var(--ink2); margin: 0 0 .6rem; }
+  .lgd span { display: inline-flex; align-items: center; gap: .4rem; }
+  .bar-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .5rem 1rem; margin-bottom: .8rem; }
+  .bar-head .lede { margin: 0; }
+  .callout { font-size: .9rem; color: var(--text); margin: .7rem 0 0; }
+  .callout b { color: var(--text-strong); }
+
+  details.table { margin-top: .6rem; font-size: .85rem; }
+  details.table summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+  .scroll { overflow-x: auto; }
+  table.data { border-collapse: collapse; margin-top: .5rem; min-width: 100%; font-variant-numeric: tabular-nums; font-size: .85rem; }
+  table.data th, table.data td { padding: .32rem .7rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.data th:first-child, table.data td:first-child { text-align: left; }
+  table.data th { color: var(--ink2); font-weight: 600; }
+
+  /* department table */
+  #depts table { width: 100%; margin: 0; }
+  #depts th { position: sticky; top: 0; background: #fff; cursor: pointer; user-select: none; }
+  #depts th[aria-sort] { color: var(--accent); }
+  #depts th button { all: unset; cursor: pointer; }
+  #depts tbody tr { cursor: pointer; }
+  #depts tbody tr:hover td { background: var(--wash); }
+  #depts tbody tr.sel td { background: var(--accent-soft); font-weight: 600; }
+  #depts tbody tr.all td { font-weight: 700; }
+  #depts td.name { white-space: normal; min-width: 12rem; }
+  .wbar { display: inline-flex; align-items: center; gap: .5rem; justify-content: flex-end; }
+  .wbar i { display: inline-block; width: 70px; height: 8px; border-radius: 4px; background: var(--grid); position: relative; overflow: hidden; }
+  .wbar i b { position: absolute; left: 0; top: 0; bottom: 0; background: var(--women); border-radius: 4px; }
+  .neg { color: #b42318; } .pos { color: #067647; } .na { color: var(--muted); }
+  #depts .scroll { max-height: 34rem; overflow: auto; }
+
+  .empty-msg { color: var(--muted); font-style: italic; font-size: .9rem; padding: 1.5rem 0; text-align: center; }
+  .about { font-size: .92rem; line-height: 1.65; }
+  .about ul { padding-left: 1.2rem; margin: .3rem 0 1rem; }
+  .about li { margin-bottom: .45rem; }
+  .about h3 { font-size: 1rem; margin: 1.2rem 0 .3rem; color: var(--text-strong); }
+  .btn-dl { display: inline-block; font-weight: 600; font-size: .9rem; padding: .45rem 1rem; border-radius: 50px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; margin-right: .5rem; }
+  .btn-dl:hover { background: var(--accent-soft); }
+
+  #tip { position: fixed; z-index: 2000; pointer-events: none; background: #fff; border: 1px solid rgba(11,11,11,.12); border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(17,17,17,.14); padding: .55rem .7rem; font-size: .8rem; color: var(--ink); min-width: 190px; max-width: 300px; line-height: 1.4; }
+  #tip b { display: block; margin-bottom: .3rem; font-size: .84rem; }
+  #tip .tr { display: flex; align-items: center; gap: .45rem; font-variant-numeric: tabular-nums; }
+  #tip .tr span { margin-left: auto; font-weight: 600; padding-left: .8rem; }
+  #tip .tr.tot { border-top: 1px solid var(--border); margin-top: .25rem; padding-top: .25rem; font-weight: 600; }
+  #tip .tm { color: var(--muted); margin-top: .3rem; font-size: .76rem; }
+
+  @media (max-width: 1020px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 860px) { .grid2, .wide { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) {
+    .main_content { padding-left: 1rem; padding-right: 1rem; }
+    .controls { position: static; margin: 0 -1rem 1.25rem; padding: .6rem 1rem; }
+    .controls > div { width: 100%; }
+    .controls select { width: 100%; }
+    .controls .seg button { padding: .35rem .55rem; font-size: .84rem; }
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tile .tv { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+  <div class="header__inner">
+    <a href="../index.html" class="brand">
+      <span class="brand__name">Mohammed Azad</span>
+      <span class="brand__title">Data Analyst</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="../about.html">About Me</a>
+      <a href="../experience.html">Experience</a>
+      <a href="../projects.html">Projects</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="main_content">
+  <div class="wf-intro">
+    <h1>Who works for LA, and what they're paid</h1>
+    <p class="sub">The City of Los Angeles' full-time workforce and pay by gender and race/ethnicity, 2018–2025, for the whole City and each department. From the LA City Controller's payroll data.</p>
+    <p class="headline" id="headline">Loading payroll data…</p>
+  </div>
+
+  <div class="controls" role="region" aria-label="Dashboard filters">
+    <div><label for="dept">Department</label><select id="dept"></select></div>
+    <div><span class="lab" id="years-lab">Year</span><span class="seg" id="years" role="group" aria-labelledby="years-lab"></span></div>
+  </div>
+
+  <section class="block" aria-labelledby="h-glance">
+    <h2 id="h-glance">At a glance</h2>
+    <p class="lede" id="glance-lede"></p>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section class="block" aria-labelledby="h-who">
+    <h2 id="h-who">Who works for the City</h2>
+    <p class="lede" id="who-lede"></p>
+    <div class="grid2 wide">
+      <div class="panel">
+        <h3>Race and ethnicity: workforce vs. LA residents</h3>
+        <p class="cap">Share of full-time employees whose race/ethnicity is known</p>
+        <div class="lgd"><span><i class="sw" style="background:var(--ink2)"></i>Full-time workforce</span><span><i class="sw tickmark"></i>City of LA residents</span></div>
+        <div class="chart" id="rep"></div>
+      </div>
+      <div class="panel">
+        <h3>Women's share of the workforce</h3>
+        <p class="cap">Full-time employees, by year</p>
+        <div class="chart" id="wshare"></div>
+        <p class="note">Dashed line: women's share of LA residents (50%).</p>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:1rem">
+      <h3>Race and ethnicity over time</h3>
+      <p class="cap">Share of full-time employees whose race/ethnicity is known</p>
+      <div class="lgd" id="eth-legend"></div>
+      <div class="chart" id="ethtime"></div>
+      <details class="table"><summary>Show data table</summary><div class="scroll" id="ethtime-table"></div></details>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-gap">
+    <h2 id="h-gap">Pay gaps: overall vs. in the same job</h2>
+    <p class="lede" id="gap-lede"></p>
+    <div class="grid2">
+      <div class="panel">
+        <h3>How much less (or more) each group is paid</h3>
+        <p class="cap">Total pay of full-year, full-time workers compared with men (for women) or White employees (for other groups)</p>
+        <div class="lgd"><span><i class="sw ring"></i>Overall: median vs. median</span><span><i class="sw dot" style="background:var(--ink)"></i>In the same job classification</span></div>
+        <div class="chart" id="gaps"></div>
+        <details class="table"><summary>Show data table</summary><div class="scroll" id="gaps-table"></div></details>
+      </div>
+      <div class="panel">
+        <h3>Women's pay gap over time</h3>
+        <p class="cap">Women's total pay compared with men's</p>
+        <div class="lgd"><span><i class="sw line" style="background:var(--women)"></i>Overall</span><span><i class="sw dash"></i>Same job</span></div>
+        <div class="chart" id="gaptime"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-ot">
+    <h2 id="h-ot">Where the money comes from</h2>
+    <p class="lede" id="ot-lede"></p>
+    <div class="panel">
+      <h3>Average pay per full-year, full-time worker</h3>
+      <div class="lgd"><span><i class="sw" style="background:var(--p-reg)"></i>Regular pay</span><span><i class="sw" style="background:var(--p-ot)"></i>Overtime</span><span><i class="sw" style="background:var(--p-oth)"></i>Other pay (bonuses, leave payouts, etc.)</span></div>
+      <div class="chart" id="comp"></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-jobs">
+    <h2 id="h-jobs">Jobs are divided by gender</h2>
+    <p class="lede" id="jobs-lede"></p>
+    <div class="panel">
+      <h3>Job classifications by women's share and median pay</h3>
+      <p class="cap" id="jobs-cap"></p>
+      <div class="chart" id="jobs"></div>
+      <details class="table"><summary>Show the largest jobs</summary><div class="scroll" id="jobs-table"></div></details>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-ladder">
+    <div class="bar-head">
+      <div>
+        <h2 id="h-ladder">Up the pay ladder</h2>
+        <p class="lede">Full-year, full-time workers split into ten equal groups by total pay, from the lowest paid 10% (1) to the highest paid 10% (10).</p>
+      </div>
+      <span class="seg" id="laddermode"><button data-m="g" aria-pressed="true">Gender</button><button data-m="e" aria-pressed="false">Race/ethnicity</button></span>
+    </div>
+    <div class="panel">
+      <div class="lgd" id="ladder-legend"></div>
+      <div class="chart" id="ladder"></div>
+      <p class="callout" id="top1"></p>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-depts">
+    <h2 id="h-depts">Departments</h2>
+    <p class="lede" id="depts-lede">Click a column to sort and a department to explore it. Pay gaps compare women with men in the department; “same job” compares women and men in the same job classification.</p>
+    <div class="panel" id="depts"><div class="scroll"></div></div>
+  </section>
+
+  <section class="block about" aria-labelledby="h-about">
+    <h2 id="h-about">About the data</h2>
+    <p><a class="btn-dl" href="data/workforce-summary.csv" download>Download the summary (CSV)</a><a class="btn-dl" href="tools/build_data.py">Build script (Python)</a></p>
+    <h3>Source</h3>
+    <ul>
+      <li><a href="https://controllerdata.lacity.org/Payroll/City-Employee-Payroll-Current-/g9h8-fvhu" target="_blank" rel="noopener">City Employee Payroll</a>, published by the Los Angeles City Controller. It covers every City employee, including the three proprietary departments: Water and Power (LADWP), Airports and Harbor. Downloaded <span id="built"></span>.</li>
+      <li>LA residents: U.S. Census Bureau, American Community Survey 2024 1-year estimates for the City of Los Angeles (tables B03002 and B01001). City employees don't all live in the city, and residents include children and retirees, so this is a rough benchmark, not a target.</li>
+    </ul>
+    <h3>Who is counted</h3>
+    <ul>
+      <li>The payroll file has a row for every job a person held in a year, so a transfer or second job adds rows. Rows are combined into one record per person per year using the employee record number. The person's job and department are the ones with the most regular pay.</li>
+      <li><b>Full-time employees</b>: anyone with a full-time pay record during the year. Part-time and per-event workers are left out.</li>
+      <li><b>Full-year, full-time workers</b>: full-time employees who were also on the payroll the year before and the year after, so they were employed the whole year. All pay comparisons use this group, which keeps new hires and people who left partway through from pulling medians down.</li>
+      <li><b>Total pay</b> is regular pay plus overtime plus other pay (bonuses, assignment pay, leave payouts and similar). It does not include benefits or the City's retirement contributions. Names are never used or published.</li>
+    </ul>
+    <h3>How the same-job gap is measured</h3>
+    <ul>
+      <li>For each year, the log of total pay is regressed on gender and race/ethnicity, with a separate baseline for every job classification. The result compares women with men, and each group with White employees, who hold the same job.</li>
+      <li>A job classification is the City's class code, so Police Officer I, II and III count as one job (the level within a class is part of what's compared). LADWP classifications are kept apart from the rest of the City because LADWP has its own pay scales.</li>
+      <li>This doesn't account for seniority, hours or which shifts and assignments people get. A gap in the same job can come from overtime, assignment pay or reaching higher levels within a class. Estimates resting on fewer than 30 people who share a job with the comparison group are left out.</li>
+    </ul>
+    <h3>Data issues</h3>
+    <ul>
+      <li><b>LADWP 2025:</b> LADWP's payroll is posted on a slower schedule, and only about half of its 2025 pay is in the file so far. 2025 pay figures therefore leave LADWP out (headcounts still include it). In 2018–2024, leaving LADWP out moved the citywide gender gap by at most <span id="dwpsens"></span> percentage points.</li>
+      <li><b>Race/ethnicity labels changed in 2024</b> (“Caucasian” became “White”, most “Filipino” records became “Native Hawaiian or Other Pacific Islander”, and new categories appeared). Groups are combined so they line up across years: Asian, Asian American, Filipino and Pacific Islander are shown together.</li>
+      <li><b>Missing demographics:</b> many 2025 records, mostly separated employees and payroll adjustments, have no gender or race/ethnicity. Where the same employee has it recorded in another year, that value is used. Records still unknown (about 5% of full-time employees for race/ethnicity) are left out of shares.</li>
+      <li>The payroll records gender as male or female, with a few dozen “other” records a year, so it can't show nonbinary employees.</li>
+      <li>2025–2026 records moved into the City's new Workday system without a job classification (“XXXX”) are left out of the same-job comparisons.</li>
+    </ul>
+    <h3>Earlier version</h3>
+    <ul>
+      <li>This page replaces my <a href="../docs/LA%20City%20Workforce%20Analysis%20(2022).html">2022 notebook</a>, which compared average pay for a single year. This version covers eight years, uses medians and full-year workers, harmonizes the race/ethnicity categories, and separates the gap that comes from which jobs people hold from the gap within the same job.</li>
+    </ul>
+    <p class="note" style="font-size:.85rem;color:var(--muted)">Developed by Mohammed Azad.</p>
+  </section>
+</main>
+
+<div id="tip" hidden></div>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <p class="footer__cta">Get in touch!</p>
+    <ul class="footer__links">
+      <li><a href="mailto:shintuzd@gmail.com">shintuzd@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/azadmohammed/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://github.com/shintuzd" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+    <p class="footer__copy">© <span data-year>2026</span> Mohammed Azad</p>
+  </div>
+</footer>
+<script src="../js/site.js"></script>
+<script>
+// ---------------------------------------------------------------- reference
+const EG = ['hisp', 'white', 'black', 'api', 'aian', 'other'];
+const ELAB = { hisp: 'Latino', white: 'White', black: 'Black', api: 'Asian & Pacific Islander', aian: 'American Indian/Alaska Native', other: 'Other or multiracial' };
+const ESHORT = { hisp: 'Latino', white: 'White', black: 'Black', api: 'Asian & PI', aian: 'Am. Indian/AK Native', other: 'Other/multiracial' };
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const ECOL = k => `var(--e-${k})`;
+
+// ---------------------------------------------------------------- data
+let D, YEARS = [], DEPTS = {};
+const S = (k, y) => D.S[`${k}|${y}`] || null;
+
+// ---------------------------------------------------------------- format
+const fmt = n => n == null ? '–' : Math.round(n).toLocaleString('en-US');
+const money = n => n == null ? '–' : '$' + fmt(n);
+const moneyK = n => n == null ? '–' : n >= 1e6 ? '$' + (n / 1e6).toFixed(1) + 'M' : '$' + Math.round(n / 1000) + 'K';
+const pc = (v, d = 0) => v == null ? '–' : (100 * v).toFixed(d) + '%';
+const pcs = v => v == null ? '–' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(100 * v).toFixed(Math.abs(v) < 0.1 ? 1 : 0) + '%';
+const gapWords = v => v == null ? 'not enough data' : Math.abs(v) < 0.005 ? 'about the same' :
+  `${Math.abs(100 * v).toFixed(Math.abs(v) < 0.1 ? 1 : 0)}% ${v < 0 ? 'less' : 'more'}`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const shareOf = (obj, k, keys) => { const t = keys.reduce((a, kk) => a + (obj[kk] || 0), 0); return t ? (obj[k] || 0) / t : null; };
+const womenShare = s => s ? shareOf(s.ftG, 'f', ['f', 'm']) : null;
+function change(cur, prev) {
+  if (cur == null || prev == null || !prev) return '';
+  const c = 100 * (cur - prev) / prev, arrow = Math.abs(c) < 0.05 ? '■' : c > 0 ? '▲' : '▼';
+  return `${arrow} ${Math.abs(c).toFixed(1)}%`;
+}
+
+// ---------------------------------------------------------------- svg helpers
+const NS = 'http://www.w3.org/2000/svg';
+function h(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) {
+    const v = attrs[k];
+    if ((k === 'fill' || k === 'stroke') && String(v).startsWith('var(')) e.style.setProperty(k, v);
+    else e.setAttribute(k, v);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function svgBox(el, W, H, label) {
+  el.innerHTML = '';
+  const s = h('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img' }, el);
+  if (label) s.setAttribute('aria-label', label);
+  return s;
+}
+function niceStep(x) {
+  const p = 10 ** Math.floor(Math.log10(x || 1)), m = x / p;
+  return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+}
+function capUp(x, y, w, hh, r) {
+  r = Math.max(0, Math.min(r, w / 2, hh));
+  return `M${x},${y + hh}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + hh}Z`;
+}
+function capRight(x, y, w, hh, r) {
+  r = Math.max(0, Math.min(r, hh / 2, w));
+  return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + hh - r}Q${x + w},${y + hh} ${x + w - r},${y + hh}H${x}Z`;
+}
+const rect = (x, y, w, hh) => `M${x},${y}h${w}v${hh}h${-w}z`;
+const measureCtx = document.createElement('canvas').getContext('2d');
+function textW(t, size = 12.5) { measureCtx.font = `${size}px Inter, system-ui, sans-serif`; return measureCtx.measureText(t).width; }
+function labelWidth(labels, W, cap = 0.45) {
+  const widest = Math.max(0, ...labels.map(l => textW(l)));
+  return Math.min(Math.ceil(widest) + 14, Math.round(W * cap));
+}
+const empty = (el, msg) => { el.innerHTML = `<p class="empty-msg">${msg}</p>`; };
+
+// ---------------------------------------------------------------- tooltip
+const tip = document.getElementById('tip');
+function moveTip(e) {
+  const r = tip.getBoundingClientRect(), pad = 14;
+  let x = e.clientX + pad, y = e.clientY + pad;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - pad;
+  if (y + r.height > innerHeight - 8) y = e.clientY - r.height - pad;
+  tip.style.left = Math.max(8, x) + 'px'; tip.style.top = Math.max(8, y) + 'px';
+}
+function bindTip(node, html, onEnter, onLeave) {
+  node.addEventListener('pointerenter', e => { tip.innerHTML = typeof html === 'function' ? html() : html; tip.hidden = false; moveTip(e); onEnter && onEnter(); });
+  node.addEventListener('pointermove', moveTip);
+  node.addEventListener('pointerleave', () => { tip.hidden = true; onLeave && onLeave(); });
+}
+const trow = (sw, label, val, cls = '') => `<div class="tr ${cls}">${sw ? `<i class="sw" style="background:${sw}"></i>` : ''}${esc(label)}<span>${val}</span></div>`;
+
+// ---------------------------------------------------------------- charts
+// Horizontal bars (workforce share) with a reference tick (residents' share).
+function repBars(el, rows) {
+  const W = Math.max(260, el.clientWidth), rowH = 32, bh = 14;
+  const labW = labelWidth(rows.map(r => r.label), W, 0.4), valW = 52;
+  const H = rows.length * rowH + 4, iw = Math.max(60, W - labW - valW);
+  const max = Math.max(0.05, ...rows.map(r => Math.max(r.v || 0, r.ref || 0))) * 1.05;
+  const x = v => labW + iw * v / max;
+  const s = svgBox(el, W, H, 'Share of full-time workforce and of LA residents by race and ethnicity');
+  h('line', { x1: labW, x2: labW, y1: 0, y2: H - 4, class: 'axis' }, s);
+  rows.forEach((r, i) => {
+    const yc = i * rowH + rowH / 2, g = h('g', {}, s);
+    h('text', { x: labW - 8, y: yc + 4, 'text-anchor': 'end', class: 'rl' }, g).textContent = r.label;
+    if (r.v != null) h('path', { d: capRight(labW, yc - bh / 2, Math.max(0, x(r.v) - labW), bh, 4), fill: r.color }, g);
+    if (r.ref != null) h('line', { x1: x(r.ref), x2: x(r.ref), y1: yc - bh / 2 - 4, y2: yc + bh / 2 + 4, class: 'ref' }, g);
+    h('text', { x: Math.max(x(r.v || 0), x(r.ref || 0)) + 7, y: yc + 4, class: 'vl sm' }, g).textContent = pc(r.v);
+    const hit = h('rect', { x: 0, y: i * rowH, width: W, height: rowH, class: 'hit' }, g);
+    bindTip(hit, `<b>${esc(r.label)}</b>` + trow(r.color, 'Full-time workforce', `${pc(r.v, 1)} · ${fmt(r.n)}`) +
+      trow(null, 'LA residents', pc(r.ref, 1)) + `<div class="tm">${r.v > r.ref ? 'Over' : 'Under'}-represented by ${Math.abs(100 * (r.v - r.ref)).toFixed(1)} points</div>`);
+  });
+}
+
+// Lines over years with a crosshair tooltip. series: [{label, color, dash, values: [] aligned to xs, fmt}]
+function lineChart(el, xs, series, o = {}) {
+  const W = Math.max(240, el.clientWidth), H = o.height || 230;
+  const endLab = W >= 380 && o.endLabels !== false;
+  const m = { t: 14, r: endLab ? (o.endW || 84) : 12, b: 24, l: 44 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const all = series.flatMap(se => se.values).filter(v => v != null).concat(o.ref != null ? [o.ref] : []);
+  let lo = o.min != null ? o.min : Math.min(...all), hi = o.max != null ? o.max : Math.max(...all);
+  const step = niceStep((hi - lo || 0.1) / 4);
+  lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+  const y = v => m.t + ih - ih * (v - lo) / (hi - lo || 1);
+  const band = iw / xs.length, x = i => m.l + band * i + band / 2;
+  const s = svgBox(el, W, H, o.label);
+  xs.forEach((xv, i) => { if (xv === o.hl) h('rect', { x: m.l + band * i, y: m.t - 6, width: band, height: ih + 6, class: 'selband', rx: 6 }, s); });
+  for (let v = lo; v <= hi + 1e-9; v += step) {
+    const isZero = Math.abs(v) < 1e-9;
+    h('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: isZero && lo < 0 ? 'zero' : v === lo ? 'axis' : 'grid' }, s);
+    h('text', { x: m.l - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, s).textContent = (o.fmtTick || pc)(v);
+  }
+  if (o.ref != null) h('line', { x1: m.l, x2: W - m.r, y1: y(o.ref), y2: y(o.ref), class: 'refline' }, s);
+  xs.forEach((xv, i) => h('text', { x: x(i), y: H - 6, 'text-anchor': 'middle', class: 'tick' + (xv === o.hl ? ' hl' : '') }, s).textContent = band < 34 ? "'" + String(xv).slice(-2) : xv);
+  series.forEach(se => {
+    let d = '', pen = false;
+    se.values.forEach((v, i) => { if (v == null) { pen = false; return; } d += (pen ? 'L' : 'M') + x(i) + ',' + y(v); pen = true; });
+    h('path', { d, class: 'ln', stroke: se.color, 'stroke-dasharray': se.dash ? '6 4' : 'none' }, s);
+    se.values.forEach((v, i) => { if (v != null && (xs[i] === o.hl || i === se.values.length - 1)) h('circle', { cx: x(i), cy: y(v), r: 4, fill: se.dash ? '#fff' : se.color, stroke: se.color, 'stroke-width': 2 }, s); });
+    const li = se.values.map((v, i) => v == null ? -1 : i).filter(i => i >= 0).pop();
+    if (endLab && li != null) h('text', { x: W - m.r + 8, y: y(se.values[li]) + 4 + (se.nudge || 0), class: 'dl b' }, s).textContent = (se.fmt || pc)(se.values[li]) + (se.short ? ' ' + se.short : '');
+  });
+  const xh = h('line', { x1: 0, x2: 0, y1: m.t, y2: m.t + ih, class: 'xh', visibility: 'hidden' }, s);
+  xs.forEach((xv, i) => {
+    const hit = h('rect', { x: m.l + band * i, y: 0, width: band, height: H, class: 'hit' }, s);
+    bindTip(hit, () => `<b>${xv}</b>` + series.map(se => trow(se.color, se.label, (se.fmt || pc)(se.values[i]))).join('') + (o.tipExtra ? o.tipExtra(i) : ''),
+      () => { xh.setAttribute('x1', x(i)); xh.setAttribute('x2', x(i)); xh.setAttribute('visibility', 'visible'); },
+      () => xh.setAttribute('visibility', 'hidden'));
+  });
+}
+
+// 100% stacked columns. keys: [{k, label, color}], data: [{x, v: {k: share}, tip}]
+function stack100(el, keys, data, o = {}) {
+  const W = Math.max(240, el.clientWidth), H = o.height || 240;
+  const m = { t: 10, r: 6, b: o.xTitle ? 40 : 24, l: 40 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const y = v => m.t + ih - ih * v;
+  const s = svgBox(el, W, H, o.label);
+  [0, .25, .5, .75, 1].forEach(v => {
+    h('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 0 ? 'axis' : 'grid' }, s);
+    h('text', { x: m.l - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, s).textContent = (v * 100) + '%';
+  });
+  const band = iw / data.length, bw = Math.min(o.barMax || 44, band * 0.7);
+  data.forEach((d, i) => {
+    const cx = m.l + band * i + band / 2, x0 = cx - bw / 2, g = h('g', {}, s);
+    if (d.v) {
+      let acc = 0;
+      const segs = keys.map(k => { const a = acc; acc += d.v[k.k] || 0; return { k, a, b: acc }; }).filter(q => q.b - q.a > 0);
+      segs.forEach((q, j) => {
+        const last = j === segs.length - 1, y0 = y(q.a) - (j > 0 ? 1 : 0), y1 = y(q.b) + (last ? 0 : 1), hh = Math.max(0, y0 - y1);
+        h('path', { d: last ? capUp(x0, y1, bw, hh, 4) : rect(x0, y1, bw, hh), fill: q.k.color }, g);
+        if (o.inLabels && bw >= 34 && hh >= 15 && q.b - q.a >= .08)
+          h('text', { x: cx, y: (y0 + y1) / 2 + 4, 'text-anchor': 'middle', fill: '#fff', 'font-size': 11, 'font-weight': 600 }, g).textContent = Math.round(100 * (q.b - q.a)) + '%';
+      });
+    }
+    h('text', { x: cx, y: m.t + ih + 16, 'text-anchor': 'middle', class: 'tick' + (d.hl ? ' hl' : '') }, g).textContent = band < 34 && /^\d{4}$/.test(d.x) ? "'" + String(d.x).slice(-2) : d.x;
+    const hit = h('rect', { x: m.l + band * i, y: 0, width: band, height: H, class: 'hit' }, g);
+    bindTip(hit, d.tip || (`<b>${d.x}</b>` + [...keys].reverse().map(k => trow(k.color, k.label, pc(d.v?.[k.k], 1))).join('')));
+  });
+  if (o.ref != null) h('line', { x1: m.l, x2: W - m.r, y1: y(o.ref), y2: y(o.ref), class: 'refline' }, s);
+  if (o.xTitle) h('text', { x: m.l + iw / 2, y: H - 4, 'text-anchor': 'middle', class: 'ttl' }, s).textContent = o.xTitle;
+}
+
+// Dumbbell of gaps: hollow = overall, filled = same job.
+function gapDumbbell(el, rows) {
+  // narrow screens: each row's label and values sit on a line above its markers
+  const W = Math.max(260, el.clientWidth), narrow = W < 520, rowH = narrow ? 48 : 34, m = { t: 22, r: narrow ? 12 : 18 };
+  const labW = narrow ? 12 : labelWidth(rows.map(r => r.label), W, 0.42);
+  const vals = rows.flatMap(r => [r.a, r.b]).filter(v => v != null);
+  let lo = Math.min(-0.1, ...vals), hi = Math.max(0.05, ...vals);
+  const step = niceStep((hi - lo) / 4); lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+  const H = m.t + rows.length * rowH + 4, iw = W - labW - m.r, x = v => labW + iw * (v - lo) / (hi - lo);
+  const s = svgBox(el, W, H, 'Pay gaps overall and within the same job');
+  for (let v = lo; v <= hi + 1e-9; v += step) {
+    const z = Math.abs(v) < 1e-9;
+    h('line', { x1: x(v), x2: x(v), y1: m.t - 4, y2: H - 4, class: z ? 'zero' : 'grid' }, s);
+    h('text', { x: x(v), y: 12, 'text-anchor': 'middle', class: 'tick' }, s).textContent = z ? '0' : pcs(v);
+  }
+  rows.forEach((r, i) => {
+    const top = m.t + i * rowH, yc = narrow ? top + 33 : top + rowH / 2, g = h('g', {}, s);
+    const known = [r.a, r.b].filter(v => v != null);
+    const txt = !known.length ? 'Too few people to compare' : r.a != null && r.b != null ? `${pcs(r.a)} → ${pcs(r.b)}` : pcs(known[0]);
+    if (narrow) {
+      h('text', { x: 0, y: top + 14, class: 'rl' + (r.hl ? ' hl' : '') }, g).textContent = r.label;
+      h('text', { x: W, y: top + 14, 'text-anchor': 'end', class: known.length ? 'vl sm' : 'dl' }, g).textContent = txt;
+    } else h('text', { x: labW - 10, y: yc + 4, 'text-anchor': 'end', class: 'rl' + (r.hl ? ' hl' : '') }, g).textContent = r.label;
+    if (r.a != null && r.b != null) h('line', { x1: x(r.a), x2: x(r.b), y1: yc, y2: yc, class: 'link' }, g);
+    if (r.a != null) h('circle', { cx: x(r.a), cy: yc, r: 5.5, fill: '#fff', stroke: r.color, 'stroke-width': 2 }, g);
+    if (r.b != null) h('circle', { cx: x(r.b), cy: yc, r: 6, fill: r.color, stroke: '#fff', 'stroke-width': 2 }, g);
+    if (!narrow) {
+      if (known.length) {
+        const rx = x(Math.max(...known)) + 11, fits = rx + textW(txt, 11.5) < W - 2;
+        h('text', { x: fits ? rx : x(Math.min(...known)) - 11, y: yc + 4, 'text-anchor': fits ? 'start' : 'end', class: 'vl sm' }, g).textContent = txt;
+      } else h('text', { x: labW + 6, y: yc + 4, class: 'dl' }, g).textContent = txt;
+    }
+    const hit = h('rect', { x: 0, y: top, width: W, height: rowH, class: 'hit' }, g);
+    bindTip(hit, `<b>${esc(r.long)}</b>` + trow(null, 'Overall (median)', pcs(r.a)) + trow(null, 'Same job, total pay', pcs(r.b)) +
+      trow(null, 'Same job, regular pay only', pcs(r.c)) + (r.n ? `<div class="tm">${fmt(r.n)} full-year workers in this group</div>` : ''));
+  });
+}
+
+// Horizontal stacked bars of pay components.
+function compBars(el, rows) {
+  const keys = [{ k: 0, label: 'Regular pay', color: 'var(--p-reg)' }, { k: 1, label: 'Overtime', color: 'var(--p-ot)' }, { k: 2, label: 'Other pay', color: 'var(--p-oth)' }];
+  const W = Math.max(260, el.clientWidth), rowH = 30, bh = 16;
+  const labW = labelWidth(rows.map(r => r.label), W, 0.36), valW = 64;
+  const H = rows.reduce((a, r) => a + (r.gapBefore ? 14 : 0), 0) + rows.length * rowH + 4, iw = Math.max(60, W - labW - valW);
+  const max = Math.max(1, ...rows.map(r => r.v ? r.v[0] + r.v[1] + r.v[2] : 0));
+  const x = v => labW + iw * v / max;
+  const s = svgBox(el, W, H, 'Average regular pay, overtime and other pay by group');
+  let yy = 0;
+  rows.forEach(r => {
+    if (r.gapBefore) yy += 14;
+    const yc = yy + rowH / 2, g = h('g', {}, s);
+    h('text', { x: labW - 8, y: yc + 4, 'text-anchor': 'end', class: 'rl' }, g).textContent = r.label;
+    if (!r.v) h('text', { x: labW + 6, y: yc + 4, class: 'dl' }, g).textContent = 'Too few people';
+    else {
+      let acc = 0;
+      const segs = keys.map(k => { const a = acc; acc += r.v[k.k]; return { k, a, b: acc }; }).filter(q => q.b > q.a);
+      segs.forEach((q, j) => {
+        const last = j === segs.length - 1, a = x(q.a) + (j > 0 ? 1 : 0), b = x(q.b) - (last ? 0 : 1);
+        h('path', { d: last ? capRight(a, yc - bh / 2, Math.max(0, b - a), bh, 4) : rect(a, yc - bh / 2, Math.max(0, b - a), bh), fill: q.k.color }, g);
+      });
+      h('text', { x: x(acc) + 6, y: yc + 4, class: 'vl sm' }, g).textContent = moneyK(acc);
+      const hit = h('rect', { x: 0, y: yy, width: W, height: rowH, class: 'hit' }, g);
+      bindTip(hit, `<b>${esc(r.long || r.label)}</b>` + keys.map(k => trow(k.color, k.label, money(r.v[k.k]))).join('') +
+        trow(null, 'Total', money(acc), 'tot') + `<div class="tm">Overtime is ${pc(r.v[1] / acc)} of total pay</div>`);
+    }
+    yy += rowH;
+  });
+  h('line', { x1: labW, x2: labW, y1: 0, y2: yy, class: 'axis' }, s);
+}
+
+// Bubble scatter: x = women's share, y = median pay, area = headcount.
+function scatter(el, pts, o = {}) {
+  const W = Math.max(260, el.clientWidth), H = Math.round(Math.min(460, Math.max(300, W * 0.55)));
+  const m = { t: 14, r: 14, b: 40, l: 56 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const ymax0 = Math.max(...pts.map(p => p.med)), step = niceStep(ymax0 / 5), ymax = Math.ceil(ymax0 / step) * step;
+  const x = v => m.l + iw * v, y = v => m.t + ih - ih * v / ymax;
+  const nmax = Math.max(...pts.map(p => p.n)), rmax = Math.max(14, Math.min(30, W / 28)), rr = n => Math.max(2.5, rmax * Math.sqrt(n / nmax));
+  const s = svgBox(el, W, H, 'Job classifications by share of women and median pay');
+  for (let v = 0; v <= ymax + 1e-9; v += step) {
+    h('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 0 ? 'axis' : 'grid' }, s);
+    h('text', { x: m.l - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, s).textContent = moneyK(v);
+  }
+  [0, .25, .5, .75, 1].forEach(v => h('text', { x: x(v), y: m.t + ih + 16, 'text-anchor': v === 0 ? 'start' : v === 1 ? 'end' : 'middle', class: 'tick' }, s).textContent = (v * 100) + '%');
+  h('text', { x: m.l + iw / 2, y: H - 4, 'text-anchor': 'middle', class: 'ttl' }, s).textContent = 'Share of the job held by women →';
+  if (o.avg != null) {
+    h('line', { x1: x(o.avg), x2: x(o.avg), y1: m.t, y2: m.t + ih, class: 'refline' }, s);
+    h('text', { x: x(o.avg) + 5, y: m.t + 10, class: 'dl' }, s).textContent = `Average: ${pc(o.avg)} women`;
+  }
+  const sorted = [...pts].sort((a, b) => b.n - a.n), boxes = [];
+  sorted.forEach(p => {
+    const c = h('circle', { cx: x(p.f), cy: y(p.med), r: rr(p.n), class: 'bub' }, s);
+    p.c = c;
+  });
+  // labels for the biggest jobs, skipping collisions
+  sorted.slice(0, W < 500 ? 4 : 9).forEach(p => {
+    const r = rr(p.n), tw = textW(p.title, 11.5), right = x(p.f) + r + 4 + tw < W - m.r;
+    const lx = right ? x(p.f) + r + 4 : x(p.f) - r - 4 - tw, ly = y(p.med) + 4;
+    const b = [lx - 2, ly - 11, lx + tw + 2, ly + 3];
+    if (boxes.some(q => b[0] < q[2] && b[2] > q[0] && b[1] < q[3] && b[3] > q[1])) return;
+    boxes.push(b);
+    h('text', { x: lx, y: ly, class: 'dl b halo' }, s).textContent = p.title;
+  });
+  [...sorted].reverse().forEach(p => {
+    const hit = h('circle', { cx: x(p.f), cy: y(p.med), r: Math.max(rr(p.n), 7), class: 'bubhit' }, s);
+    bindTip(hit, `<b>${esc(p.title)}</b>` + trow(null, 'Full-year workers', fmt(p.n)) + trow(null, 'Women', pc(p.f)) +
+      trow(null, 'Median total pay', money(p.med)) + trow(null, 'Overtime share of pay', pc(p.ot)),
+      () => p.c.classList.add('on'), () => p.c.classList.remove('on'));
+  });
+}
+
+// ---------------------------------------------------------------- state
+const state = { d: 'all', y: null, ladder: 'g', sort: 'ft', dir: -1 };
+function readHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (DEPTS[p.get('d')]) state.d = p.get('d');
+  const y = +p.get('y'); state.y = YEARS.includes(y) ? y : YEARS.at(-1);
+}
+function writeHash() { history.replaceState(null, '', `#d=${state.d}&y=${state.y}`); }
+const deptName = k => DEPTS[k]?.name || k;
+const inDept = () => state.d === 'all' ? 'the City' : deptName(state.d);
+const dwpOut = () => D.meta.dwpPartial.includes(state.y) && state.d === 'all';
+const dwpNone = () => D.meta.dwpPartial.includes(state.y) && state.d === 'water-and-power';
+function setDept(k) {
+  state.d = k; document.getElementById('dept').value = k;
+  render();
+  document.getElementById('h-glance').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ---------------------------------------------------------------- sections
+function renderControls() {
+  const box = document.getElementById('years');
+  box.innerHTML = '';
+  YEARS.forEach(y => {
+    const b = document.createElement('button');
+    b.textContent = y; b.setAttribute('aria-pressed', String(y === state.y));
+    b.onclick = () => { state.y = y; render(); };
+    box.appendChild(b);
+  });
+}
+
+function renderHeadline() {
+  const s = S(state.d, state.y), p = s?.pay, el = document.getElementById('headline');
+  if (!s) { el.textContent = `No full-time employees in ${deptName(state.d)} in ${state.y}.`; return; }
+  let t = `In ${state.y}, ${state.d === 'all' ? 'the City of Los Angeles' : '<b>' + esc(deptName(state.d)) + '</b>'} employed <b>${fmt(s.ft)}</b> people full time, and <b>${pc(womenShare(s))}</b> of them were women.`;
+  if (p?.gapG?.raw != null) {
+    t += ` Among full-year workers, women's median pay was <b>${gapWords(p.gapG.raw)}</b> than men's`;
+    t += p.gapG.job != null ? `. Compared with men in the same job, women were paid <b>${gapWords(p.gapG.job)}</b>: ${Math.abs(p.gapG.job) < Math.abs(p.gapG.raw) / 2 ? 'most of the difference comes from which jobs women and men hold.' : 'much of it remains even within the same job.'}` : '.';
+  }
+  el.innerHTML = t;
+}
+
+function tile(o) {
+  if (o.v == null) return `<div class="tile empty"><div class="tl">${o.label}</div><div class="tv">${o.emptyMsg || 'Not enough data'}</div></div>`;
+  return `<div class="tile"><div class="tl">${o.label}</div><div class="tv">${o.v}${o.small ? `<small>${o.small}</small>` : ''}</div>${o.split || ''}
+    ${o.delta ? `<div class="td">${o.delta}</div>` : ''}${o.sub ? `<div class="ts">${o.sub}</div>` : ''}</div>`;
+}
+function renderTiles() {
+  const { d, y } = state, s = S(d, y), p = s?.pay, i = YEARS.indexOf(y), py = i > 0 ? YEARS[i - 1] : null, ps = py && S(d, py);
+  const ws = womenShare(s), pws = womenShare(ps);
+  const noPay = dwpNone() ? 'LADWP 2025 pay incomplete' : 'Too few to compare';
+  const html = [
+    tile({ label: 'Full-time employees', v: s ? fmt(s.ft) : null, delta: ps ? `${change(s.ft, ps.ft)} from ${py}` : '' }),
+    tile({ label: 'Women', v: ws != null ? pc(ws) : null, small: `${fmt(s?.ftG.f)}`,
+      split: ws != null ? `<div class="split" aria-hidden="true"><i style="flex:${ws};background:var(--women)"></i><i style="flex:${1 - ws};background:var(--men)"></i></div>` : '',
+      delta: pws != null ? `${ws >= pws ? '▲' : '▼'} ${Math.abs(100 * (ws - pws)).toFixed(1)} pts from ${py}` : '', sub: 'LA residents: 50%' }),
+    tile({ label: 'Median total pay', v: p ? money(p.med) : null, emptyMsg: noPay,
+      sub: p ? `Women ${moneyK(p.medG.f)} · Men ${moneyK(p.medG.m)}` : '' }),
+    tile({ label: "Women's pay gap, overall", v: p?.gapG?.raw != null ? pcs(p.gapG.raw) : null, emptyMsg: noPay,
+      sub: 'Median woman vs. median man' }),
+    tile({ label: "Women's pay gap, same job", v: p?.gapG?.job != null ? pcs(p.gapG.job) : null, emptyMsg: noPay,
+      sub: p?.gapG?.jobReg != null ? `${pcs(p.gapG.jobReg)} in regular pay alone` : '' }),
+  ];
+  document.getElementById('tiles').innerHTML = html.join('');
+  document.getElementById('glance-lede').innerHTML =
+    `Pay figures are for full-year, full-time workers (${p ? fmt(p.n) : '–'} people in ${y}), including overtime and other pay.` +
+    (dwpOut() ? ` <b>2025 pay figures leave out LADWP</b>, whose 2025 payroll is not yet complete; headcounts include it.` : '');
+}
+
+function renderWho() {
+  const { d, y } = state, s = S(d, y), pop = D.meta.pop;
+  if (!s) return;
+  const known = EG.reduce((a, e) => a + (s.ftE[e] || 0), 0), popT = EG.reduce((a, e) => a + pop.e[e], 0);
+  const rows = EG.map(e => ({ label: ELAB[e], v: known ? (s.ftE[e] || 0) / known : null, n: s.ftE[e] || 0, ref: pop.e[e] / popT, color: ECOL(e) }));
+  repBars(document.getElementById('rep'), rows);
+  const r = Object.fromEntries(EG.map((e, i) => [e, rows[i]]));
+  const unk = s.ftE.u || 0;
+  document.getElementById('who-lede').innerHTML =
+    `${d === 'all' ? "The City's" : esc(deptName(d)) + "'s"} full-time workforce is <b>${pc(r.hisp.v)} Latino</b> (vs. ${pc(r.hisp.ref)} of LA residents), ` +
+    `<b>${pc(r.white.v)} White</b> (${pc(r.white.ref)}), <b>${pc(r.black.v)} Black</b> (${pc(r.black.ref)}) and <b>${pc(r.api.v)} Asian &amp; Pacific Islander</b> (${pc(r.api.ref)}). ` +
+    (unk ? `Race/ethnicity is unknown for ${fmt(unk)} employees (${pc(unk / s.ft)}), who are left out of the shares.` : '');
+  // women's share over time
+  const vals = YEARS.map(yy => womenShare(S(d, yy)));
+  lineChart(document.getElementById('wshare'), YEARS, [{ label: 'Women', color: 'var(--women)', values: vals }],
+    { hl: y, ref: pop.g.f / pop.total, min: 0, max: Math.max(0.55, ...vals.filter(v => v != null)), height: 210, endW: 46,
+      label: 'Share of full-time employees who are women, by year', tipExtra: i => { const ss = S(d, YEARS[i]); return ss ? trow(null, 'Women', fmt(ss.ftG.f)) + trow(null, 'Men', fmt(ss.ftG.m)) : ''; } });
+  // race/ethnicity over time
+  const keys = EG.map(e => ({ k: e, label: ESHORT[e], color: ECOL(e) }));
+  document.getElementById('eth-legend').innerHTML = keys.map(k => `<span><i class="sw" style="background:${k.color}"></i>${k.label}</span>`).join('');
+  const data = YEARS.map(yy => {
+    const ss = S(d, yy); if (!ss) return { x: yy, hl: yy === y };
+    const kn = EG.reduce((a, e) => a + (ss.ftE[e] || 0), 0);
+    return { x: yy, hl: yy === y, v: Object.fromEntries(EG.map(e => [e, kn ? (ss.ftE[e] || 0) / kn : 0])) };
+  });
+  stack100(document.getElementById('ethtime'), keys, data, { height: 230, inLabels: true, label: 'Race and ethnicity of full-time employees by year' });
+  document.getElementById('ethtime-table').innerHTML = `<table class="data"><thead><tr><th>Year</th>${EG.map(e => `<th>${ESHORT[e]}</th>`).join('')}<th>Unknown</th><th>Full-time</th></tr></thead><tbody>` +
+    YEARS.map(yy => { const ss = S(d, yy); return ss ? `<tr><td>${yy}</td>${EG.map(e => `<td>${fmt(ss.ftE[e] || 0)}</td>`).join('')}<td>${fmt(ss.ftE.u || 0)}</td><td>${fmt(ss.ft)}</td></tr>` : ''; }).join('') + '</tbody></table>';
+}
+
+function renderGaps() {
+  const { d, y } = state, p = S(d, y)?.pay, el = document.getElementById('gaps'), lede = document.getElementById('gap-lede');
+  if (!p) { empty(el, dwpNone() ? "LADWP's 2025 payroll is not complete yet." : 'Too few full-year workers to compare.'); document.getElementById('gaps-table').innerHTML = ''; lede.textContent = ''; }
+  else {
+    const rows = [{ label: 'Women vs. men', long: 'Women compared with men', a: p.gapG.raw, b: p.gapG.job, c: p.gapG.jobReg, n: p.nG.f, color: 'var(--women)', hl: true }]
+      .concat(EG.filter(e => e !== 'white').map(e => ({ label: ESHORT[e] + ' vs. White', long: `${ELAB[e]} compared with White employees`, a: p.gapE[e].raw, b: p.gapE[e].job, c: p.gapE[e].jobReg, n: p.nE[e], color: ECOL(e) })));
+    gapDumbbell(el, rows);
+    document.getElementById('gaps-table').innerHTML = `<table class="data"><thead><tr><th>Comparison</th><th>Overall</th><th>Same job</th><th>Same job, regular pay</th><th>Median pay</th><th>Workers</th></tr></thead><tbody>` +
+      rows.map((r, i) => `<tr><td>${esc(r.label)}</td><td>${pcs(r.a)}</td><td>${pcs(r.b)}</td><td>${pcs(r.c)}</td><td>${money(i === 0 ? p.medG.f : p.medE[EG.filter(e => e !== 'white')[i - 1]])}</td><td>${fmt(r.n)}</td></tr>`).join('') +
+      `<tr><td>Men / White (comparison)</td><td colspan="3"></td><td>${money(p.medG.m)} / ${money(p.medE.white)}</td><td>${fmt(p.nG.m)} / ${fmt(p.nE.white)}</td></tr></tbody></table>`;
+    const b = p.gapE.black, h2 = p.gapE.hisp;
+    lede.innerHTML = `Overall gaps compare the middle (median) worker in each group, so they mix two things: who holds which jobs, and pay differences within a job. ` +
+      `In ${y}, the median woman ${state.d === 'all' ? 'at the City' : 'in ' + esc(deptName(d))} was paid <b>${gapWords(p.gapG.raw)}</b> than the median man, but women were paid <b>${gapWords(p.gapG.job)}</b> than men in the same job. ` +
+      (b.raw != null ? `Black employees' median pay was <b>${gapWords(b.raw)}</b> than White employees'; in the same job, <b>${gapWords(b.job)}</b>. ` : '') +
+      (h2.raw != null ? `For Latino employees: <b>${gapWords(h2.raw)}</b> overall, <b>${gapWords(h2.job)}</b> in the same job.` : '');
+  }
+  const raw = YEARS.map(yy => S(d, yy)?.pay?.gapG?.raw ?? null), job = YEARS.map(yy => S(d, yy)?.pay?.gapG?.job ?? null);
+  const gt = document.getElementById('gaptime');
+  if (raw.every(v => v == null)) empty(gt, 'Too few full-year workers to compare.');
+  else lineChart(gt, YEARS, [
+    { label: 'Overall', color: 'var(--women)', values: raw, fmt: pcs, short: 'overall' },
+    { label: 'Same job', color: 'var(--women)', dash: true, values: job, fmt: pcs, short: 'same job' }],
+    { hl: y, max: 0, height: 230, endW: 108, fmtTick: v => Math.abs(v) < 1e-9 ? '0' : '−' + Math.round(Math.abs(100 * v)) + '%', label: "Women's pay gap by year, overall and within the same job",
+      tipExtra: i => D.meta.dwpPartial.includes(YEARS[i]) && d === 'all' ? '<div class="tm">Leaves out LADWP (2025 payroll incomplete)</div>' : '' });
+}
+
+function renderComp() {
+  const { d, y } = state, p = S(d, y)?.pay, el = document.getElementById('comp'), lede = document.getElementById('ot-lede');
+  if (!p) { empty(el, dwpNone() ? "LADWP's 2025 payroll is not complete yet." : 'Too few full-year workers to compare.'); lede.textContent = ''; return; }
+  const rows = [{ label: 'Everyone', v: p.comp.all }, { label: 'Men', v: p.comp.m, gapBefore: true }, { label: 'Women', v: p.comp.f }]
+    .concat(EG.map((e, i) => ({ label: ESHORT[e], long: ELAB[e], v: p.comp[e], gapBefore: i === 0 })));
+  compBars(el, rows);
+  const m = p.comp.m, f = p.comp.f;
+  if (m && f) {
+    const tm = m[0] + m[1] + m[2], tf = f[0] + f[1] + f[2];
+    lede.innerHTML = `Overtime is a big part of pay in police, fire, sanitation and utility jobs, which are mostly held by men. ` +
+      `In ${y}, men averaged <b>${money(m[1])}</b> in overtime and women <b>${money(f[1])}</b>. ` +
+      `Overtime accounts for <b>${pc((m[1] - f[1]) / (tm - tf))}</b> of the difference in average total pay between men and women, and regular pay for ${pc((m[0] - f[0]) / (tm - tf))}.`;
+  } else lede.textContent = '';
+}
+
+function renderJobs() {
+  const { d, y } = state, el = document.getElementById('jobs'), rows = D.J[`${d}|${y}`] || [];
+  const pts = rows.map(r => ({ title: r[0], n: r[1], f: r[2], med: r[3], ot: r[4] }));
+  const lede = document.getElementById('jobs-lede');
+  if (pts.length < 3) { empty(el, dwpNone() ? "LADWP's 2025 payroll is not complete yet." : 'Too few jobs with enough workers to show.'); lede.textContent = ''; document.getElementById('jobs-table').innerHTML = ''; document.getElementById('jobs-cap').textContent = ''; return; }
+  const p = S(d, y).pay, avg = p ? p.nG.f / (p.nG.f + p.nG.m) : null;
+  scatter(el, pts, { avg });
+  document.getElementById('jobs-cap').textContent = `Each circle is a job classification with at least 15 full-year, full-time workers in ${y}, sized by how many. Hover for details.`;
+  const big = pts.slice(0, 12), totN = pts.reduce((a, q) => a + q.n, 0);
+  const seg = pts.filter(q => q.f < 0.2 || q.f > 0.8).reduce((a, q) => a + q.n, 0);
+  const top = pts[0];
+  const wavg = qs => { const n = qs.reduce((a, q) => a + q.n, 0); return n ? qs.reduce((a, q) => a + q.n * q.med, 0) / n : null; };
+  const mJobs = wavg(pts.filter(q => q.f < 0.5)), fJobs = wavg(pts.filter(q => q.f >= 0.5));
+  lede.innerHTML = `${seg / totN >= 0.5 ? 'Most' : 'Many'} people work in jobs held mostly by one gender: <b>${pc(seg / totN)}</b> of the workers shown are in jobs that are more than 80% men or more than 80% women. ` +
+    `The largest, ${esc(top.title)}, is ${pc(top.f)} women, with a median pay of ${money(top.med)}.` +
+    (mJobs && fJobs ? ` In jobs where most workers are men, the typical median pay is <b>${moneyK(mJobs)}</b>; in jobs where most are women, <b>${moneyK(fJobs)}</b>.` : '');
+  document.getElementById('jobs-table').innerHTML = `<table class="data"><thead><tr><th>Job</th><th>Workers</th><th>Women</th><th>Median pay</th><th>Overtime share</th></tr></thead><tbody>` +
+    pts.slice(0, 40).map(q => `<tr><td>${esc(q.title)}</td><td>${fmt(q.n)}</td><td>${pc(q.f)}</td><td>${money(q.med)}</td><td>${pc(q.ot)}</td></tr>`).join('') + '</tbody></table>';
+}
+
+function renderLadder() {
+  const { d, y, ladder } = state, p = S(d, y)?.pay, el = document.getElementById('ladder'), lg = document.getElementById('ladder-legend'), t1 = document.getElementById('top1');
+  if (!p?.dec) { empty(el, dwpNone() ? "LADWP's 2025 payroll is not complete yet." : 'Too few full-year workers to split into ten groups.'); lg.innerHTML = ''; t1.innerHTML = ''; return; }
+  const rng = q => `${money(q.lo)} – ${money(q.hi)}`;
+  if (ladder === 'g') {
+    const keys = [{ k: 'f', label: 'Women', color: 'var(--women)' }, { k: 'm', label: 'Men', color: 'var(--men)' }];
+    lg.innerHTML = keys.map(k => `<span><i class="sw" style="background:${k.color}"></i>${k.label}</span>`).join('') + '<span><i class="sw dash" style="border-color:var(--ink2)"></i>Women\'s share of all full-year workers</span>';
+    stack100(el, keys, p.dec.map((q, i) => ({ x: String(i + 1), v: q.f == null ? null : { f: q.f, m: 1 - q.f }, tip: `<b>Pay group ${i + 1}</b><div class="tm" style="margin:0 0 .3rem">${rng(q)}</div>` + trow('var(--women)', 'Women', pc(q.f)) + trow('var(--men)', 'Men', pc(1 - q.f)) })),
+      { height: 260, inLabels: true, ref: p.nG.f / (p.nG.f + p.nG.m), xTitle: 'Pay group (1 = lowest paid 10%, 10 = highest paid 10%)', label: 'Gender of workers in each pay decile' });
+  } else {
+    const keys = EG.map(e => ({ k: e, label: ESHORT[e], color: ECOL(e) }));
+    lg.innerHTML = keys.map(k => `<span><i class="sw" style="background:${k.color}"></i>${k.label}</span>`).join('');
+    stack100(el, keys, p.dec.map((q, i) => ({ x: String(i + 1), v: q.e, tip: `<b>Pay group ${i + 1}</b><div class="tm" style="margin:0 0 .3rem">${rng(q)}</div>` + [...keys].map(k => trow(k.color, k.label, pc(q.e?.[k.k], 1))).join('') })),
+      { height: 260, inLabels: true, xTitle: 'Pay group (1 = lowest paid 10%, 10 = highest paid 10%)', label: 'Race and ethnicity of workers in each pay decile' });
+  }
+  const t = p.top1, kg = (t.g.f || 0) + (t.g.m || 0), ke = EG.reduce((a, e) => a + (t.e[e] || 0), 0);
+  const lead = EG.filter(e => t.e[e]).sort((a, b) => t.e[b] - t.e[a]);
+  t1.innerHTML = `<b>Top 1%:</b> the ${fmt(t.n)} best-paid workers (${money(t.lo)} or more) were <b>${pc((t.g.f || 0) / kg)} women</b> and ` +
+    lead.slice(0, 3).map(e => `${pc(t.e[e] / ke)} ${ELAB[e]}`).join(', ') + '.';
+}
+
+const DCOLS = [
+  { k: 'name', label: 'Department', get: r => r.name },
+  { k: 'ft', label: 'Full-time', get: r => r.ft },
+  { k: 'w', label: 'Women', get: r => r.w },
+  { k: 'med', label: 'Median pay', get: r => r.med },
+  { k: 'raw', label: 'Gap, overall', get: r => r.raw },
+  { k: 'job', label: 'Gap, same job', get: r => r.job },
+];
+function renderDepts() {
+  const { y } = state, box = document.querySelector('#depts .scroll');
+  const rows = D.depts.map(dp => {
+    const s = S(dp.k, y); if (!s) return null;
+    return { k: dp.k, name: dp.name, ft: s.ft, w: womenShare(s), med: s.pay?.med ?? null, raw: s.pay?.gapG?.raw ?? null, job: s.pay?.gapG?.job ?? null };
+  }).filter(Boolean);
+  const all = rows.shift(), col = DCOLS.find(c => c.k === state.sort);
+  rows.sort((a, b) => {
+    const va = col.get(a), vb = col.get(b);
+    if (va == null) return 1; if (vb == null) return -1;
+    return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * state.dir;
+  });
+  const gcell = v => v == null ? '<td class="na">–</td>' : `<td class="${v < -0.005 ? 'neg' : v > 0.005 ? 'pos' : ''}">${pcs(v)}</td>`;
+  const tr = r => `<tr data-k="${r.k}" class="${r.k === 'all' ? 'all ' : ''}${r.k === state.d ? 'sel' : ''}" tabindex="0">
+    <td class="name">${esc(r.name)}</td><td>${fmt(r.ft)}</td>
+    <td><span class="wbar">${pc(r.w)}<i><b style="width:${(100 * (r.w || 0)).toFixed(1)}%"></b></i></span></td>
+    <td>${r.med == null ? '<span class="na">–</span>' : money(r.med)}</td>${gcell(r.raw)}${gcell(r.job)}</tr>`;
+  box.innerHTML = `<table class="data"><thead><tr>${DCOLS.map(c => `<th ${c.k === state.sort ? `aria-sort="${state.dir > 0 ? 'ascending' : 'descending'}"` : ''}><button data-k="${c.k}">${c.label}${c.k === state.sort ? (state.dir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('')}</tr></thead>
+    <tbody>${tr(all)}${rows.map(tr).join('')}</tbody></table>`;
+  box.querySelectorAll('th button').forEach(b => b.onclick = () => {
+    const k = b.dataset.k; if (state.sort === k) state.dir *= -1; else { state.sort = k; state.dir = k === 'name' ? 1 : -1; }
+    renderDepts();
+  });
+  box.querySelectorAll('tbody tr').forEach(r => {
+    r.onclick = () => setDept(r.dataset.k);
+    r.onkeydown = e => { if (e.key === 'Enter') setDept(r.dataset.k); };
+  });
+  document.getElementById('depts-lede').innerHTML = `Full-time employees and pay in ${y}. Click a column to sort and a department to explore it. Pay gaps compare women with men in the department, overall and in the same job; “–” means too few people to compare.` +
+    (D.meta.dwpPartial.includes(y) ? ` LADWP's ${y} pay is not complete yet, so its pay columns are blank.` : '');
+}
+
+function render() {
+  renderControls(); renderHeadline(); renderTiles(); renderWho(); renderGaps(); renderComp(); renderJobs(); renderLadder(); renderDepts();
+  writeHash();
+}
+
+// ---------------------------------------------------------------- boot
+function sizeHeader() {
+  const hd = document.querySelector('.header');
+  if (hd) document.documentElement.style.setProperty('--hdr', hd.offsetHeight + 'px');
+}
+
+fetch('data/workforce.json').then(r => r.json()).then(data => {
+  D = data;
+  YEARS = D.meta.years;
+  D.depts.forEach(d => { DEPTS[d.k] = d; });
+  const sel = document.getElementById('dept');
+  sel.innerHTML = `<option value="all">All departments</option><optgroup label="Departments (largest first)">${D.depts.slice(1).map(d => `<option value="${d.k}">${esc(d.name)}</option>`).join('')}</optgroup>`;
+  sel.addEventListener('change', () => { state.d = sel.value; render(); });
+  document.getElementById('laddermode').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.ladder = b.dataset.m;
+    [...e.currentTarget.children].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    renderLadder();
+  });
+  document.getElementById('built').textContent = new Date(D.meta.built + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('dwpsens').textContent = (100 * D.meta.dwpSens).toFixed(1);
+  readHash();
+  sel.value = state.d;
+  sizeHeader();
+  render();
+  let t, lastW = innerWidth;
+  addEventListener('resize', () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(t); t = setTimeout(() => { sizeHeader(); render(); }, 120); });
+}).catch(err => {
+  document.getElementById('headline').textContent = 'The data could not be loaded. ' + err.message;
+});
+</script>
+</body>
+</html>
